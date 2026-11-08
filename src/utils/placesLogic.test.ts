@@ -21,6 +21,7 @@ import { getPlaceImageUrl } from './placeImages';
 import { getLocalizedPlaceText, PLACE_TRANSLATIONS_RU } from '../data/translationsRu';
 import { BOOKABLE_TOURS } from '../data/toursData';
 import { filterMustTrySnacks, MUST_TRY_SNACKS } from '../data/snacksData';
+import { TAIPEI_MRT_LINES, TAIPEI_MRT_STATIONS } from '../data/taipeiMrtData';
 
 test('dataset integrity: all places have valid coordinates, Google Maps links, Russian translations, and local photographs', () => {
   assert.ok(PLACES_DATA.length >= 65, `Expected at least 65 places, got ${PLACES_DATA.length}`);
@@ -396,4 +397,21 @@ test('real-time Sort by distance (sortBy: nearest) recalculates distances, ranks
   assert.equal(nearestToTpkd[0].id, 'google-tpkd-office');
   assert.equal(nearestToTpkd[0].distanceKm, 0);
 });
+
+test('Taipei MRT metro lines and stations dataset covers all 6 color-coded lines and major transfer stations', () => {
+  assert.equal(TAIPEI_MRT_LINES.length, 6);
+  const lineIds = TAIPEI_MRT_LINES.map((l) => l.id);
+  assert.deepEqual(lineIds, ['R', 'BL', 'G', 'O', 'BR', 'Y']);
+  for (const line of TAIPEI_MRT_LINES) {
+    assert.ok(line.segments.length > 0, `Expected route segments for MRT line ${line.id}`);
+    assert.ok(line.color.startsWith('#'), `Expected hex color for MRT line ${line.id}`);
+  }
+
+  assert.ok(TAIPEI_MRT_STATIONS.length >= 115);
+  const taipei101Station = TAIPEI_MRT_STATIONS.find((s) => s.code === 'R03');
+  assert.ok(taipei101Station, 'Expected Taipei 101 / World Trade Center MRT station (R03)');
+  const mainStation = TAIPEI_MRT_STATIONS.find((s) => s.nameZh === '台北車站');
+  assert.ok(mainStation?.isTransfer, 'Expected Taipei Main Station to be marked as transfer');
+});
+
 

@@ -2,6 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import { BaseLocation, MacroCategory } from '../data/placesData';
 import {
+  MrtLineId,
+  TAIPEI_MRT_LINES,
+  TAIPEI_MRT_STATIONS,
+} from '../data/taipeiMrtData';
+import {
   getLocalizedBaseLocation,
   getLocalizedPlaceText,
   Language,
@@ -13,12 +18,12 @@ import {
   Bookmark,
   ChevronLeft,
   ChevronRight,
-  Compass,
   ExternalLink,
   Maximize2,
   Minimize2,
   Navigation,
   Sparkles,
+  TrainFront,
 } from 'lucide-react';
 
 interface InteractiveMapProps {
@@ -209,6 +214,61 @@ const BIG_HUB_IDS = new Set([
   'brownies-xinyi',
 ]);
 
+const MRT_LINE_COLORS: Record<MrtLineId, { color: string; textColor: string }> = {
+  R: { color: '#E3002C', textColor: '#FFFFFF' },
+  BL: { color: '#0070BD', textColor: '#FFFFFF' },
+  G: { color: '#008659', textColor: '#FFFFFF' },
+  O: { color: '#F59E0B', textColor: '#FFFFFF' },
+  BR: { color: '#B47B28', textColor: '#FFFFFF' },
+  Y: { color: '#EAB308', textColor: '#0F172A' },
+};
+
+function createMrtStationIcon(
+  lines: MrtLineId[],
+  isTransfer: boolean,
+  shortCode: string,
+  nameZh: string,
+  showLabel: boolean
+): L.DivIcon {
+  const primaryColor = MRT_LINE_COLORS[lines[0]]?.color || '#E3002C';
+  const secondaryColor = lines.length > 1 ? MRT_LINE_COLORS[lines[1]]?.color : null;
+  const dotSize = isTransfer ? 14 : 10;
+
+  const ringStyle = secondaryColor
+    ? `background: #FFFFFF; border: 3px solid ${primaryColor}; box-shadow: 0 0 0 2.5px ${secondaryColor}, 0 2px 6px rgba(15,23,42,0.35);`
+    : `background: #FFFFFF; border: 2.5px solid ${primaryColor}; box-shadow: 0 1px 4px rgba(15,23,42,0.3);`;
+
+  const labelHtml = showLabel
+    ? `<span style="
+        margin-left: 4px;
+        padding: 1px 4px;
+        border-radius: 4px;
+        background: rgba(255,255,255,0.92);
+        border: 1px solid ${primaryColor}55;
+        color: #0F172A;
+        font-size: 9.5px;
+        font-weight: 700;
+        line-height: 1.15;
+        white-space: nowrap;
+        box-shadow: 0 1px 3px rgba(15,23,42,0.14);
+      "><span style="color:${primaryColor};font-family:'JetBrains Mono',monospace;margin-right:2px;">${shortCode}</span>${nameZh}</span>`
+    : '';
+
+  const html = `
+    <div style="display:inline-flex;align-items:center;transform:translate(-${dotSize / 2}px, -${dotSize / 2}px);pointer-events:auto;">
+      <span style="width:${dotSize}px;height:${dotSize}px;border-radius:9999px;display:inline-block;flex-shrink:0;${ringStyle}"></span>
+      ${labelHtml}
+    </div>
+  `;
+
+  return L.divIcon({
+    html,
+    className: 'mrt-station-icon',
+    iconSize: [dotSize, dotSize],
+    iconAnchor: [0, 0],
+  });
+}
+
 export const InteractiveMap: React.FC<InteractiveMapProps> = ({
   places,
   allPlaces = [],
@@ -226,10 +286,14 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
 }) => {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
+  const mrtLayerRef = useRef<L.LayerGroup | null>(null);
   const markersLayerRef = useRef<L.LayerGroup | null>(null);
   const routePolylineRef = useRef<L.Polyline | null>(null);
 
   const [isCardDismissed, setIsCardDismissed] = React.useState(false);
+  const [showMrtLines, setShowMrtLines] = React.useState(true);
+  const [activeMrtLine, setActiveMrtLine] = React.useState<MrtLineId | 'all'>('all');
+  const [mapZoom, setMapZoom] = React.useState(13);
   const t = UI_STRINGS[lang];
 
   const sourcePool = allPlaces.length > 0 ? allPlaces : places;
@@ -277,13 +341,20 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
 
     L.control.zoom({ position: 'topright' }).addTo(map);
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap',
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO · Taipei MRT',
+      subdomains: 'abcd',
       maxZoom: 19,
     }).addTo(map);
 
+    mrtLayerRef.current = L.layerGroup().addTo(map);
     markersLayerRef.current = L.layerGroup().addTo(map);
     mapInstanceRef.current = map;
+
+    const handleZoomEnd = () => {
+      setMapZoom(map.getZoom());
+    };
+    map.on('zoomend', handleZoomEnd);
 
     const resizeObserver = new ResizeObserver(() => {
       map.invalidateSize();
@@ -291,11 +362,108 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
     resizeObserver.observe(mapContainerRef.current);
 
     return () => {
+      map.off('zoomend', handleZoomEnd);
       resizeObserver.disconnect();
       map.remove();
       mapInstanceRef.current = null;
     };
   }, []);
+
+  // Render Taipei Metro (MRT) lines and station markers
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    const mrtLayer = mrtLayerRef.current;
+    if (!map || !mrtLayer) return;
+
+    mrtLayer.clearLayers();
+    if (!showMrtLines) return;
+
+    // 1. Draw colored Taipei MRT lines with white casing so they stand out at all zoom levels
+    TAIPEI_MRT_LINES.forEach((line) => {
+      const isSelectedLine = activeMrtLine === line.id;
+      const isDimmed = activeMrtLine !== 'all' && !isSelectedLine;
+      const lineTitle = lang === 'ru' ? line.nameRu : line.nameEn;
+
+      line.segments.forEach((segment) => {
+        // White halo casing underneath
+        L.polyline(segment, {
+          color: '#FFFFFF',
+          weight: isSelectedLine ? 8.5 : isDimmed ? 4.5 : 7,
+          opacity: isDimmed ? 0.45 : 0.92,
+          lineCap: 'round',
+          lineJoin: 'round',
+          interactive: false,
+        }).addTo(mrtLayer);
+
+        // Colored MRT route line
+        const coloredLine = L.polyline(segment, {
+          color: line.color,
+          weight: isSelectedLine ? 5.5 : isDimmed ? 2.5 : 4.2,
+          opacity: isDimmed ? 0.32 : 0.95,
+          lineCap: 'round',
+          lineJoin: 'round',
+        });
+
+        coloredLine.bindTooltip(
+          `<div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;"><span style="background:${line.color};color:${line.textColor};padding:1px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;">${line.code}</span><span>${lineTitle} (${line.nameZh})</span></div>`,
+          { sticky: true, direction: 'top' }
+        );
+
+        coloredLine.on('click', () => {
+          setActiveMrtLine((prev) => (prev === line.id ? 'all' : line.id));
+        });
+
+        coloredLine.addTo(mrtLayer);
+      });
+    });
+
+    // 2. Draw MRT Station markers and labels
+    TAIPEI_MRT_STATIONS.forEach((station) => {
+      const matchesFilter =
+        activeMrtLine === 'all' || station.lines.includes(activeMrtLine);
+      if (!matchesFilter) return;
+
+      const shortCode = station.code.split(' / ')[0];
+      const showStationLabel =
+        mapZoom >= 14 ||
+        (mapZoom >= 13 && (station.isTransfer || activeMrtLine !== 'all')) ||
+        (mapZoom >= 12 && activeMrtLine !== 'all' && station.isTransfer);
+
+      const stationMarker = L.marker([station.lat, station.lng], {
+        icon: createMrtStationIcon(
+          station.lines,
+          station.isTransfer,
+          shortCode,
+          station.nameZh,
+          showStationLabel
+        ),
+        zIndexOffset: station.isTransfer ? 60 : 20,
+      });
+
+      const badgesHtml = station.lines
+        .map((lid) => {
+          const c = MRT_LINE_COLORS[lid];
+          return `<span style="background:${c.color};color:${c.textColor};padding:1px 5px;border-radius:4px;font-size:10px;font-weight:800;font-family:'JetBrains Mono',monospace;">${lid}</span>`;
+        })
+        .join(' ');
+
+      const stationTitle = lang === 'ru' ? station.nameRu : station.nameEn;
+
+      stationMarker.bindTooltip(
+        `<div style="min-width:140px;">
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:3px;">
+            ${badgesHtml}
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#475569;">${station.code}</span>
+          </div>
+          <div style="font-weight:700;font-size:12px;color:#0F172A;line-height:1.25;">🚇 ${stationTitle}</div>
+          <div style="font-size:11px;color:#475569;margin-top:1px;">${station.nameZh}站 · Taipei MRT</div>
+        </div>`,
+        { direction: 'top', offset: [0, -8] }
+      );
+
+      stationMarker.addTo(mrtLayer);
+    });
+  }, [showMrtLines, activeMrtLine, mapZoom, lang]);
 
   // Update markers and optional itinerary polyline whenever places, selection, base, or language changes
   useEffect(() => {
@@ -626,6 +794,68 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
             )}
           </button>
         )}
+      </div>
+
+      {/* Taipei Metro (MRT) Line Legend & Filter Bar */}
+      <div className="absolute top-12 left-2 right-12 z-[400] flex items-center gap-1 overflow-x-auto no-scrollbar pointer-events-auto">
+        <div className="inline-flex items-center gap-1 bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-xl px-1.5 py-1 shadow-sm">
+          <button
+            type="button"
+            onClick={() => setShowMrtLines((prev) => !prev)}
+            className={`px-2 py-0.5 rounded-lg text-[10px] sm:text-[11px] font-bold inline-flex items-center gap-1 transition-colors ${
+              showMrtLines
+                ? 'bg-slate-900 text-white'
+                : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+            }`}
+            title={
+              lang === 'ru'
+                ? 'Показать / скрыть линии метро Тайбэя (MRT)'
+                : 'Toggle Taipei Metro (MRT) lines'
+            }
+          >
+            <TrainFront className="w-3 h-3 shrink-0" />
+            <span>{lang === 'ru' ? 'Метро' : 'MRT'}</span>
+          </button>
+
+          {showMrtLines && (
+            <>
+              <button
+                type="button"
+                onClick={() => setActiveMrtLine('all')}
+                className={`px-1.5 py-0.5 rounded-md text-[10px] font-bold transition-colors ${
+                  activeMrtLine === 'all'
+                    ? 'bg-slate-200 text-slate-900'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                {lang === 'ru' ? 'Все' : 'All'}
+              </button>
+              {TAIPEI_MRT_LINES.map((line) => {
+                const isActive = activeMrtLine === line.id;
+                const lineTitle = lang === 'ru' ? line.nameRu : line.nameEn;
+                return (
+                  <button
+                    key={line.id}
+                    type="button"
+                    onClick={() =>
+                      setActiveMrtLine((prev) => (prev === line.id ? 'all' : line.id))
+                    }
+                    title={`${lineTitle} (${line.nameZh})`}
+                    style={{
+                      backgroundColor: line.color,
+                      color: line.textColor,
+                      opacity: activeMrtLine === 'all' || isActive ? 1 : 0.4,
+                      outline: isActive ? '2px solid #0F172A' : 'none',
+                    }}
+                    className="px-1.5 py-0.5 rounded-md text-[10px] font-extrabold font-mono-num transition-all"
+                  >
+                    {line.code}
+                  </button>
+                );
+              })}
+            </>
+          )}
+        </div>
       </div>
 
       {/* Minimized Pill when user closes the bottom preview card */}
