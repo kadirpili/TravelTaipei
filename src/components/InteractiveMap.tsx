@@ -341,9 +341,8 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
 
     L.control.zoom({ position: 'topright' }).addTo(map);
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap &copy; CARTO · Taipei MRT',
-      subdomains: 'abcd',
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap · Taipei MRT',
       maxZoom: 19,
     }).addTo(map);
 
@@ -388,8 +387,8 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
         // White halo casing underneath
         L.polyline(segment, {
           color: '#FFFFFF',
-          weight: isSelectedLine ? 8.5 : isDimmed ? 4.5 : 7,
-          opacity: isDimmed ? 0.45 : 0.92,
+          weight: isSelectedLine ? 9.5 : isDimmed ? 4.5 : 8,
+          opacity: isDimmed ? 0.5 : 0.96,
           lineCap: 'round',
           lineJoin: 'round',
           interactive: false,
@@ -398,8 +397,8 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
         // Colored MRT route line
         const coloredLine = L.polyline(segment, {
           color: line.color,
-          weight: isSelectedLine ? 5.5 : isDimmed ? 2.5 : 4.2,
-          opacity: isDimmed ? 0.32 : 0.95,
+          weight: isSelectedLine ? 6 : isDimmed ? 2.5 : 4.8,
+          opacity: isDimmed ? 0.35 : 0.98,
           lineCap: 'round',
           lineJoin: 'round',
         });

@@ -3,7 +3,7 @@ import { getPlaceImageUrl } from './placeImages';
 
 export const OFFLINE_SNAPSHOT_STORAGE_KEY = 'taipei_wayfinder_offline_snapshot_v1';
 export const DATA_CACHE_NAME = 'taipei-places-data-cache';
-export const CORE_CACHE_NAME = 'taipei-wayfinder-sw-v1';
+export const CORE_CACHE_NAME = 'taipei-wayfinder-sw-v2';
 
 export interface OfflineSnapshot {
   version: string;
