@@ -1,0 +1,6 @@
+{
+  "name": "Taipei Wayfinder — Interactive Travel & Dining Map",
+  "description": "Mobile-first interactive guide and map for exploring neighborhoods, scenic parks, iconic landmarks, hot pot, izakayas, tea houses, and curated itineraries across Taipei and New Taipei City.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
