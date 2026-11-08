@@ -1,16 +1,17 @@
 const CACHE_VERSION = 'taipei-wayfinder-sw-v1';
 const DATA_CACHE = 'taipei-places-data-cache';
 const TILE_CACHE = 'taipei-osm-tiles-cache';
+const BASE_PATH = new URL('./', self.location.href).pathname;
 
 const CORE_ASSETS = [
-  '/',
-  '/index.html',
-  '/icon.svg',
-  '/apple-touch-icon.png',
-  '/pwa-192x192.png',
-  '/pwa-512x512.png',
-  '/pwa-maskable-512x512.png',
-  '/places-offline-cache.json',
+  BASE_PATH,
+  `${BASE_PATH}index.html`,
+  `${BASE_PATH}icon.svg`,
+  `${BASE_PATH}apple-touch-icon.png`,
+  `${BASE_PATH}pwa-192x192.png`,
+  `${BASE_PATH}pwa-512x512.png`,
+  `${BASE_PATH}pwa-maskable-512x512.png`,
+  `${BASE_PATH}places-offline-cache.json`,
 ];
 
 self.addEventListener('install', (event) => {
@@ -106,7 +107,7 @@ self.addEventListener('fetch', (event) => {
           const cached = await cache.match(request);
           if (cached) return cached;
           if (request.mode === 'navigate') {
-            const indexCached = await cache.match('/index.html') || await cache.match('/');
+            const indexCached = await cache.match(`${BASE_PATH}index.html`) || await cache.match(BASE_PATH);
             if (indexCached) return indexCached;
           }
           return new Response('Offline', { status: 503 });

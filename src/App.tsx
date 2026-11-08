@@ -182,7 +182,7 @@ export default function App() {
   }, [savedIds, placesSource]);
 
   useEffect(() => {
-    fetch('/places-offline-cache.json')
+    fetch(`${import.meta.env.BASE_URL}places-offline-cache.json`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data && Array.isArray(data.places) && data.places.length > 0) {

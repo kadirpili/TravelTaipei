@@ -4,8 +4,10 @@ import path from 'path';
 import {defineConfig} from 'vite';
 import {VitePWA} from 'vite-plugin-pwa';
 
-export default defineConfig(() => {
+export default defineConfig(({command}) => {
+  const base = process.env.VITE_BASE_PATH || (command === 'build' ? '/TravelTaipei/' : '/');
   return {
+    base,
     plugins: [
       react(),
       tailwindcss(),
@@ -20,7 +22,7 @@ export default defineConfig(() => {
           'places-offline-cache.json',
         ],
         manifest: {
-          id: '/',
+          id: base,
           name: 'Taipei Wayfinder — Interactive Travel & Dining Map',
           short_name: 'Wayfinder',
           description:
@@ -28,23 +30,23 @@ export default defineConfig(() => {
           theme_color: '#0F172A',
           background_color: '#F8F7F4',
           display: 'standalone',
-          start_url: '/',
-          scope: '/',
+          start_url: base,
+          scope: base,
           icons: [
             {
-              src: '/pwa-192x192.png',
+              src: `${base}pwa-192x192.png`,
               sizes: '192x192',
               type: 'image/png',
               purpose: 'any',
             },
             {
-              src: '/pwa-512x512.png',
+              src: `${base}pwa-512x512.png`,
               sizes: '512x512',
               type: 'image/png',
               purpose: 'any',
             },
             {
-              src: '/pwa-maskable-512x512.png',
+              src: `${base}pwa-maskable-512x512.png`,
               sizes: '512x512',
               type: 'image/png',
               purpose: 'maskable',
@@ -53,7 +55,7 @@ export default defineConfig(() => {
         },
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg,json,woff,woff2}'],
-          navigateFallback: '/index.html',
+          navigateFallback: `${base}index.html`,
           runtimeCaching: [
             {
               urlPattern: /\/places-offline-cache\.json$/i,

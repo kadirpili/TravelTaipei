@@ -4,5 +4,6 @@
  * for instant loading and 100% offline availability.
  */
 export function getPlaceImageUrl(placeId: string): string {
-  return `/images/places/${placeId}.jpg`;
+  const base = (import.meta as { env?: { BASE_URL?: string } }).env?.BASE_URL || '/';
+  return `${base}images/places/${placeId}.jpg`;
 }

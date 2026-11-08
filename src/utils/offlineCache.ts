@@ -96,22 +96,23 @@ export async function syncOfflineAssetsAndPlaces(
   if (typeof window !== 'undefined' && 'caches' in window) {
     try {
       cacheStorageAvailable = true;
+      const base = (import.meta as { env?: { BASE_URL?: string } }).env?.BASE_URL || '/';
       const dataCache = await window.caches.open(DATA_CACHE_NAME);
       const jsonResponse = new Response(JSON.stringify(snapshot), {
         headers: { 'Content-Type': 'application/json' },
       });
-      await dataCache.put('/places-offline-cache.json', jsonResponse);
+      await dataCache.put(`${base}places-offline-cache.json`, jsonResponse);
       cachedUrlsCount += 1;
 
       const coreCache = await window.caches.open(CORE_CACHE_NAME);
       const savedPhotoUrls = savedIds.map((id) => getPlaceImageUrl(id));
       const coreUrls = [
-        '/',
-        '/index.html',
-        '/icon.svg',
-        '/pwa-192x192.png',
-        '/pwa-512x512.png',
-        '/apple-touch-icon.png',
+        base,
+        `${base}index.html`,
+        `${base}icon.svg`,
+        `${base}pwa-192x192.png`,
+        `${base}pwa-512x512.png`,
+        `${base}apple-touch-icon.png`,
         ...savedPhotoUrls,
       ];
       await Promise.allSettled(
