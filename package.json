@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
     "build": "vite build && cp dist/index.html dist/404.html",
+    "deploy": "npm run build && rm -f .git/gh-pages-index && GIT_INDEX_FILE=\"$PWD/.git/gh-pages-index\" git --work-tree=dist add -A && tree=$(GIT_INDEX_FILE=\"$PWD/.git/gh-pages-index\" git write-tree) && commit=$(git commit-tree \"$tree\" -m \"Deploy to GitHub Pages\") && rm -f .git/gh-pages-index && git push origin \"${commit}:refs/heads/gh-pages\" --force",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit"
