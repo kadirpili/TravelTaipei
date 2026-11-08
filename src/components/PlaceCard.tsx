@@ -84,14 +84,15 @@ export const PlaceCard: React.FC<PlaceCardProps> = ({
       }`}
     >
       {/* Place Photograph Banner */}
-      <div className="relative h-32 sm:h-48 w-full overflow-hidden bg-slate-200">
+      <div className="relative h-40 sm:h-52 w-full overflow-hidden bg-slate-200">
         <img
           src={imageUrl}
           alt={`${loc.displayName} (${place.chineseName})`}
           loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-300"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/65 via-slate-950/10 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none" />
 
         {/* Bottom-Left Distance & Travel Estimate over Photo */}
         <div className="absolute bottom-2 left-2.5 right-14 flex items-center justify-between gap-2 pointer-events-none">

@@ -73,13 +73,14 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Hero Image Header with Dark Scrim & Close Button */}
-        <div className="relative h-48 sm:h-56 w-full shrink-0 bg-slate-900 overflow-hidden">
+        <div className="relative h-52 sm:h-64 w-full shrink-0 bg-slate-900 overflow-hidden">
           <img
             src={heroImageUrl}
             alt={loc.displayName}
+            decoding="async"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/35 to-slate-950/15" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
 
           <button
             type="button"
