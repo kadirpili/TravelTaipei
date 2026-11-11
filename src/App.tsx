@@ -546,7 +546,7 @@ export default function App() {
         {/* Zone 2: Concise single-line navigation links */}
         <nav
           aria-label="Primary Navigation"
-          className="hidden md:flex items-center gap-4 xl:gap-6 text-sm font-medium text-slate-600"
+          className="hidden md:flex items-center gap-3 xl:gap-5 text-xs xl:text-sm font-medium text-slate-600 overflow-x-auto no-scrollbar min-w-0"
         >
           <button
             type="button"

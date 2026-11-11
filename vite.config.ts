@@ -54,6 +54,9 @@ export default defineConfig(({command}) => {
           ],
         },
         workbox: {
+          skipWaiting: true,
+          clientsClaim: true,
+          cleanupOutdatedCaches: true,
           globPatterns: ['**/*.{js,css,html,ico,png,svg,json,woff,woff2}'],
           navigateFallback: `${base}index.html`,
           runtimeCaching: [
