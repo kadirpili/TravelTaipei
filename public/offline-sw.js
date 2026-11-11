@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'taipei-wayfinder-sw-v2';
+const CACHE_VERSION = 'taipei-wayfinder-sw-v3';
 const DATA_CACHE = 'taipei-places-data-cache';
 const TILE_CACHE = 'taipei-osm-tiles-cache';
 const BASE_PATH = new URL('./', self.location.href).pathname;

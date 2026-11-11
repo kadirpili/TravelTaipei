@@ -21,6 +21,7 @@ import { getPlaceImageUrl } from './placeImages';
 import { getLocalizedPlaceText, PLACE_TRANSLATIONS_RU } from '../data/translationsRu';
 import { BOOKABLE_TOURS } from '../data/toursData';
 import { filterMustTrySnacks, MUST_TRY_SNACKS } from '../data/snacksData';
+import { FESTIVE_EVENTS, filterFestiveEvents } from '../data/eventsData';
 import { TAIPEI_MRT_LINES, TAIPEI_MRT_STATIONS } from '../data/taipeiMrtData';
 
 test('dataset integrity: all places have valid coordinates, Google Maps links, Russian translations, and local photographs', () => {
@@ -439,6 +440,37 @@ test('Lihpao Land Resort in Taichung (Taizhong) exists and matches English, Russ
     );
   }
 });
+
+test('FESTIVE_EVENTS (Dec 22 – Jan 7) have valid placeIds, date phases, categories, and bilingual details', () => {
+  assert.ok(FESTIVE_EVENTS.length >= 10, `Expected at least 10 festive events, got ${FESTIVE_EVENTS.length}`);
+  const validPlaceIds = new Set(PLACES_DATA.map((p) => p.id));
+
+  for (const evt of FESTIVE_EVENTS) {
+    assert.ok(evt.titleEn.length > 0 && evt.titleRu.length > 0, `Event ${evt.id} missing bilingual title`);
+    assert.ok(evt.titleZh.length > 0, `Event ${evt.id} missing Chinese title`);
+    assert.ok(evt.dateRangeEn.length > 0 && evt.dateRangeRu.length > 0, `Event ${evt.id} missing date range`);
+    assert.ok(evt.datePhase.length >= 1, `Event ${evt.id} missing datePhase`);
+    assert.ok(evt.placeIds.length >= 1, `Event ${evt.id} must link to at least 1 map placeId`);
+    for (const pid of evt.placeIds) {
+      assert.ok(
+        validPlaceIds.has(pid),
+        `Event ${evt.id} references unknown placeId "${pid}"`
+      );
+    }
+  }
+
+  // Test filtering by date phase and category
+  const nyePeakEvents = filterFestiveEvents(FESTIVE_EVENTS, 'all', 'nye_peak', '');
+  assert.ok(nyePeakEvents.some((e) => e.id === 'taipei-101-nye-fireworks'));
+  assert.ok(nyePeakEvents.some((e) => e.id === 'lihpao-taichung-nye-concert'));
+
+  const fireworksOnly = filterFestiveEvents(FESTIVE_EVENTS, 'nye_countdown', 'all', '');
+  assert.ok(fireworksOnly.length >= 3);
+
+  const christmaslandQuery = filterFestiveEvents(FESTIVE_EVENTS, 'all', 'all', 'Banqiao');
+  assert.ok(christmaslandQuery.some((e) => e.id === 'new-taipei-christmasland-banqiao'));
+});
+
 
 
 

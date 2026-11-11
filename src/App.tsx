@@ -31,8 +31,10 @@ import { PlaceDetailSheet } from './components/PlaceDetailSheet';
 import { ItineraryView } from './components/ItineraryView';
 import { ToursView } from './components/ToursView';
 import { SnacksView } from './components/SnacksView';
+import { EventsView } from './components/EventsView';
 import { BOOKABLE_TOURS } from './data/toursData';
 import { MUST_TRY_SNACKS } from './data/snacksData';
+import { FESTIVE_EVENTS } from './data/eventsData';
 import { OfflineControlBar } from './components/OfflineControlBar';
 import {
   loadOfflineSnapshot,
@@ -46,6 +48,7 @@ import {
   Globe,
   ListFilter,
   Map as MapIcon,
+  PartyPopper,
   RotateCcw,
   Search,
   SlidersHorizontal,
@@ -60,6 +63,7 @@ type ActiveTab =
   | 'dining'
   | 'tea_nightlife'
   | 'snacks'
+  | 'events'
   | 'itineraries'
   | 'tours';
 type MobileLayoutMode = 'split' | 'list' | 'map';
@@ -126,6 +130,9 @@ export default function App() {
   );
   const [activeSnackId, setActiveSnackId] = useState<string>(
     MUST_TRY_SNACKS[0].id
+  );
+  const [activeEventId, setActiveEventId] = useState<string>(
+    FESTIVE_EVENTS[0].id
   );
 
   // Filter & Sort States
@@ -259,6 +266,15 @@ export default function App() {
         .filter((p): p is EnrichedPlaceItem => Boolean(p));
     }
 
+    if (activeTab === 'events') {
+      const currentEvent =
+        FESTIVE_EVENTS.find((ev) => ev.id === activeEventId) ?? FESTIVE_EVENTS[0];
+      const placeMap = new Map(allEnrichedPlaces.map((p) => [p.id, p]));
+      return currentEvent.placeIds
+        .map((pid) => placeMap.get(pid))
+        .filter((p): p is EnrichedPlaceItem => Boolean(p));
+    }
+
     if (activeTab === 'tours') {
       const currentTour =
         BOOKABLE_TOURS.find((tr) => tr.id === activeTourId) ?? BOOKABLE_TOURS[0];
@@ -292,6 +308,7 @@ export default function App() {
   }, [
     activeTab,
     activeSnackId,
+    activeEventId,
     activeTourId,
     activeItineraryId,
     allEnrichedPlaces,
@@ -330,6 +347,16 @@ export default function App() {
       return orderMap;
     }
 
+    if (activeTab === 'events') {
+      const currentEvent =
+        FESTIVE_EVENTS.find((ev) => ev.id === activeEventId) ?? FESTIVE_EVENTS[0];
+      const orderMap = new Map<string, number>();
+      currentEvent.placeIds.forEach((pid, index) => {
+        orderMap.set(pid, index + 1);
+      });
+      return orderMap;
+    }
+
     if (activeTab === 'tours') {
       const currentTour =
         BOOKABLE_TOURS.find((tr) => tr.id === activeTourId) ?? BOOKABLE_TOURS[0];
@@ -349,7 +376,7 @@ export default function App() {
       orderMap.set(stop.placeId, index + 1);
     });
     return orderMap;
-  }, [activeTab, activeSnackId, activeTourId, activeItineraryId]);
+  }, [activeTab, activeSnackId, activeEventId, activeTourId, activeItineraryId]);
 
   const selectedPlace = useMemo(
     () =>
@@ -370,6 +397,13 @@ export default function App() {
         MUST_TRY_SNACKS.find((sn) => sn.id === activeSnackId) ?? MUST_TRY_SNACKS[0];
       if (currentSnack.placeIds[0]) {
         setSelectedPlaceId(currentSnack.placeIds[0]);
+      }
+    }
+    if (tab === 'events') {
+      const currentEvent =
+        FESTIVE_EVENTS.find((ev) => ev.id === activeEventId) ?? FESTIVE_EVENTS[0];
+      if (currentEvent.placeIds[0]) {
+        setSelectedPlaceId(currentEvent.placeIds[0]);
       }
     }
   };
@@ -527,6 +561,17 @@ export default function App() {
           </button>
           <button
             type="button"
+            onClick={() => handleTabChange('events')}
+            className={`py-1 transition-colors whitespace-nowrap shrink-0 border-b-2 ${
+              activeTab === 'events'
+                ? 'border-amber-700 text-amber-800 font-bold'
+                : 'border-transparent text-amber-900 hover:text-slate-900 font-semibold'
+            }`}
+          >
+            {t.navEvents}
+          </button>
+          <button
+            type="button"
             onClick={() => handleTabChange('snacks')}
             className={`py-1 transition-colors whitespace-nowrap shrink-0 border-b-2 ${
               activeTab === 'snacks'
@@ -632,7 +677,8 @@ export default function App() {
               if (
                 activeTab === 'itineraries' ||
                 activeTab === 'tours' ||
-                activeTab === 'snacks'
+                activeTab === 'snacks' ||
+                activeTab === 'events'
               ) {
                 setActiveTab('all');
               }
@@ -742,21 +788,23 @@ export default function App() {
                 id="category-filter-select"
                 aria-label={lang === 'ru' ? 'Категория' : 'Category'}
                 value={
-                  activeTab === 'snacks'
-                    ? 'tab:snacks'
-                    : activeTab === 'tours'
-                      ? 'tab:tours'
-                      : activeTab === 'itineraries'
-                        ? 'tab:itineraries'
-                        : personalHubsOnly
-                          ? 'preset:myhubs'
-                          : savedOnly
-                            ? 'preset:saved'
-                            : subCategory !== 'all'
-                              ? `sub:${subCategory}`
-                              : activeTab !== 'all'
-                                ? `tab:${activeTab}`
-                                : 'all'
+                  activeTab === 'events'
+                    ? 'tab:events'
+                    : activeTab === 'snacks'
+                      ? 'tab:snacks'
+                      : activeTab === 'tours'
+                        ? 'tab:tours'
+                        : activeTab === 'itineraries'
+                          ? 'tab:itineraries'
+                          : personalHubsOnly
+                            ? 'preset:myhubs'
+                            : savedOnly
+                              ? 'preset:saved'
+                              : subCategory !== 'all'
+                                ? `sub:${subCategory}`
+                                : activeTab !== 'all'
+                                  ? `tab:${activeTab}`
+                                  : 'all'
                 }
                 onChange={(e) => {
                   const val = e.target.value;
@@ -783,7 +831,8 @@ export default function App() {
                     if (
                       activeTab === 'tours' ||
                       activeTab === 'itineraries' ||
-                      activeTab === 'snacks'
+                      activeTab === 'snacks' ||
+                      activeTab === 'events'
                     ) {
                       setActiveTab('all');
                     }
@@ -803,6 +852,11 @@ export default function App() {
                     {lang === 'ru'
                       ? `🌏 Все места (${placesSource.length})`
                       : `🌏 All Places (${placesSource.length})`}
+                  </option>
+                  <option value="tab:events">
+                    {lang === 'ru'
+                      ? `🎉 События 22 дек – 7 янв (${FESTIVE_EVENTS.length})`
+                      : `🎉 Events Dec 22 – Jan 7 (${FESTIVE_EVENTS.length})`}
                   </option>
                   <option value="tab:snacks">
                     {lang === 'ru'
@@ -859,7 +913,8 @@ export default function App() {
             {/* 3. District Dropdown (Row 2 on mobile) */}
             {activeTab !== 'itineraries' &&
               activeTab !== 'tours' &&
-              activeTab !== 'snacks' && (
+              activeTab !== 'snacks' &&
+              activeTab !== 'events' && (
                 <div className="flex items-center bg-slate-50 border border-slate-200 rounded-xl px-1.5 sm:px-2 min-h-[34px] sm:min-h-[38px] flex-1 min-w-0 sm:w-auto lg:max-w-[185px] order-3">
                   <label htmlFor="district-filter-select" className="sr-only">
                     {t.districtLabel}
@@ -959,7 +1014,8 @@ export default function App() {
             {/* 5. Sort Dropdown (Toolbar) */}
             {activeTab !== 'itineraries' &&
               activeTab !== 'tours' &&
-              activeTab !== 'snacks' && (
+              activeTab !== 'snacks' &&
+              activeTab !== 'events' && (
                 <div className="hidden sm:flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-xl px-2.5 min-h-[38px] sm:w-auto lg:max-w-[175px] order-7">
                   <ListFilter className="w-3.5 h-3.5 text-slate-500 shrink-0" />
                   <label htmlFor="sort-mode-select" className="sr-only">
@@ -1002,7 +1058,11 @@ export default function App() {
                   await syncOfflineAssetsAndPlaces(placesSource, savedIds);
                 }}
                 onShowSavedSpots={() => {
-                  if (activeTab === 'itineraries' || activeTab === 'tours') {
+                  if (
+                    activeTab === 'itineraries' ||
+                    activeTab === 'tours' ||
+                    activeTab === 'events'
+                  ) {
                     setActiveTab('all');
                   }
                   setSavedOnly(true);
@@ -1039,13 +1099,15 @@ export default function App() {
                 onToggleSave={handleToggleSave}
                 itineraryStopOrder={itineraryStopOrder}
                 routeFitKey={
-                  activeTab === 'snacks'
-                    ? `snack-${activeSnackId}`
-                    : activeTab === 'tours'
-                      ? `tour-${activeTourId}`
-                      : activeTab === 'itineraries'
-                        ? `itinerary-${activeItineraryId}`
-                        : undefined
+                  activeTab === 'events'
+                    ? `event-${activeEventId}`
+                    : activeTab === 'snacks'
+                      ? `snack-${activeSnackId}`
+                      : activeTab === 'tours'
+                        ? `tour-${activeTourId}`
+                        : activeTab === 'itineraries'
+                          ? `itinerary-${activeItineraryId}`
+                          : undefined
                 }
                 lang={lang}
                 mobileLayout={mobileLayout}
@@ -1056,13 +1118,28 @@ export default function App() {
             </div>
           </div>
 
-          {/* Left Directory / Snacks / Tours / Itinerary Column */}
+          {/* Left Directory / Events / Snacks / Tours / Itinerary Column */}
           <div
             className={`lg:col-span-6 lg:order-1 ${
               mobileLayout === 'map' ? 'hidden lg:block' : 'block'
             }`}
           >
-            {activeTab === 'snacks' ? (
+            {activeTab === 'events' ? (
+              <EventsView
+                allPlaces={allEnrichedPlaces}
+                activeEventId={activeEventId}
+                onSelectEvent={(evt) => {
+                  setActiveEventId(evt.id);
+                  if (evt.placeIds[0]) {
+                    setSelectedPlaceId(evt.placeIds[0]);
+                  }
+                }}
+                onSelectPlaceOnMap={handleSelectPlaceOnMap}
+                onOpenPlaceDetail={(place) => setDetailModalPlace(place)}
+                lang={lang}
+                externalSearchQuery={searchQuery}
+              />
+            ) : activeTab === 'snacks' ? (
               <SnacksView
                 allPlaces={allEnrichedPlaces}
                 activeSnackId={activeSnackId}
@@ -1311,10 +1388,10 @@ export default function App() {
         </div>
       )}
 
-      {/* Mobile Fixed Bottom Navigation Bar (5 Ergonomic Thumb-Zone Tabs: 78px wide each on 390px phone) */}
+      {/* Mobile Fixed Bottom Navigation Bar (6 Ergonomic Thumb-Zone Tabs) */}
       <nav
         aria-label="Mobile Bottom Navigation"
-        className="fixed bottom-0 left-0 right-0 z-40 h-14 bg-white/95 backdrop-blur-md border-t border-slate-200 grid grid-cols-5 items-center px-1 lg:hidden"
+        className="fixed bottom-0 left-0 right-0 z-40 h-14 bg-white/95 backdrop-blur-md border-t border-slate-200 grid grid-cols-6 items-center px-1 lg:hidden"
       >
         <button
           type="button"
@@ -1326,11 +1403,29 @@ export default function App() {
           }`}
         >
           {activeTab === 'all' && !savedOnly && (
-            <span className="absolute top-0 inset-x-3 h-0.5 bg-amber-700 rounded-b-full" />
+            <span className="absolute top-0 inset-x-2 h-0.5 bg-amber-700 rounded-b-full" />
           )}
           <MapIcon className="w-4 h-4" />
           <span className="text-[10px] mt-0.5 whitespace-nowrap">
             {t.mobileNavAll(placesSource.length)}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => handleTabChange('events')}
+          className={`h-full flex flex-col items-center justify-center transition-colors relative ${
+            activeTab === 'events'
+              ? 'text-amber-800 font-bold'
+              : 'text-slate-500 hover:text-slate-900'
+          }`}
+        >
+          {activeTab === 'events' && (
+            <span className="absolute top-0 inset-x-2 h-0.5 bg-amber-700 rounded-b-full" />
+          )}
+          <PartyPopper className="w-4 h-4" />
+          <span className="text-[10px] mt-0.5 whitespace-nowrap">
+            {t.mobileNavEvents}
           </span>
         </button>
 
@@ -1344,7 +1439,7 @@ export default function App() {
           }`}
         >
           {activeTab === 'snacks' && (
-            <span className="absolute top-0 inset-x-3 h-0.5 bg-amber-700 rounded-b-full" />
+            <span className="absolute top-0 inset-x-2 h-0.5 bg-amber-700 rounded-b-full" />
           )}
           <Cookie className="w-4 h-4" />
           <span className="text-[10px] mt-0.5 whitespace-nowrap">
@@ -1362,7 +1457,7 @@ export default function App() {
           }`}
         >
           {(activeTab === 'dining' || activeTab === 'tea_nightlife') && (
-            <span className="absolute top-0 inset-x-3 h-0.5 bg-amber-700 rounded-b-full" />
+            <span className="absolute top-0 inset-x-2 h-0.5 bg-amber-700 rounded-b-full" />
           )}
           <Utensils className="w-4 h-4" />
           <span className="text-[10px] mt-0.5 whitespace-nowrap">
@@ -1380,7 +1475,7 @@ export default function App() {
           }`}
         >
           {activeTab === 'tours' && (
-            <span className="absolute top-0 inset-x-3 h-0.5 bg-amber-700 rounded-b-full" />
+            <span className="absolute top-0 inset-x-2 h-0.5 bg-amber-700 rounded-b-full" />
           )}
           <Ticket className="w-4 h-4" />
           <span className="text-[10px] mt-0.5 whitespace-nowrap">{t.mobileNavTours}</span>
@@ -1396,7 +1491,7 @@ export default function App() {
           }`}
         >
           {(activeTab === 'itineraries' || activeTab === 'sights') && (
-            <span className="absolute top-0 inset-x-3 h-0.5 bg-amber-700 rounded-b-full" />
+            <span className="absolute top-0 inset-x-2 h-0.5 bg-amber-700 rounded-b-full" />
           )}
           <Calendar className="w-4 h-4" />
           <span className="text-[10px] mt-0.5 whitespace-nowrap">{t.mobileNavPlans}</span>

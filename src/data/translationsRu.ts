@@ -116,6 +116,7 @@ export const UI_STRINGS = {
     navItineraries: 'Маршруты',
     navTours: 'Туры Klook',
     navSnacks: 'Что попробовать (Снэки и Боба)',
+    navEvents: '🎉 События (22 дек–7 янв)',
     savedTripBtn: (count: number) => `Избранное (${count})`,
     viewingSavedBtn: (count: number) => `Избранное (${count}) ✓`,
     searchPlaceholder: (count: number) =>
@@ -146,6 +147,7 @@ export const UI_STRINGS = {
     mobileNavPlans: 'Маршруты',
     mobileNavTours: 'Туры',
     mobileNavSnacks: 'Хиты еды',
+    mobileNavEvents: 'События',
     // Map labels
     pinsCount: (count: number) => `${count} точек`,
     legendSights: 'Места',
@@ -223,6 +225,7 @@ export const UI_STRINGS = {
     navItineraries: 'Itineraries',
     navTours: 'Tours (Klook)',
     navSnacks: 'Must-Try Snacks',
+    navEvents: '🎉 Events (Dec 22–Jan 7)',
     savedTripBtn: (count: number) => `Saved Trip (${count})`,
     viewingSavedBtn: (count: number) => `Viewing Saved (${count})`,
     searchPlaceholder: (count: number) =>
@@ -253,6 +256,7 @@ export const UI_STRINGS = {
     mobileNavPlans: 'Day Plans',
     mobileNavTours: 'Tours',
     mobileNavSnacks: 'Snacks',
+    mobileNavEvents: 'Events',
     // Map labels
     pinsCount: (count: number) => `${count} ${count === 1 ? 'Pin' : 'Pins'}`,
     legendSights: 'Sights',
