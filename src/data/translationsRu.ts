@@ -62,11 +62,13 @@ export const DISTRICT_RU: Record<string, string> = {
   Pingxi: 'Пинси (Шифэнь)',
   Shiding: 'Шидин (Озеро Тысячи Островов)',
   Wulai: 'Улай (Водопад и источники)',
+  'Taichung (Houli)': 'Тайчжун (Хоули / Lihpao)',
 };
 
-export const CITY_RU: Record<'Taipei' | 'New Taipei', string> = {
+export const CITY_RU: Record<'Taipei' | 'New Taipei' | 'Taichung', string> = {
   Taipei: 'Тайбэй',
   'New Taipei': 'Новый Тайбэй',
+  Taichung: 'Тайчжун',
 };
 
 export const BASE_LOCATION_RU: Record<string, { nameRu: string; districtRu: string }> = {
@@ -1332,6 +1334,16 @@ export const PLACE_TRANSLATIONS_RU: Record<string, PlaceTranslationRu> = {
     recommendedDurationRu: '45–75 мин',
     tagsRu: ['Тайваньский завтрак', 'Соевое молоко', 'Лепешки Шаобин', 'Гид Мишлен'],
   },
+  'lihpao-land-taichung': {
+    nameRu: 'Курорт и парк аттракционов Липао Лэнд — Тайчжун (麗寶樂園渡假區・台中)',
+    overviewRu:
+      'Крупнейший парк развлечений и курортный комплекс Тайваня в районе Хоули города Тайчжун (Taizhong, 200 гектаров). Включает парк аттракционов Discovery World (с уникальными американскими горками Gravity Max с вертикальным сбросом рельса на 90°), аквапарк Mala Bay с гигантской волной, самое большое колесо обозрения Тайваня Sky Dream (120 м), итальянский аутлет-молл и международный автодром для картинга.',
+    insiderTipRu:
+      'Садитесь на скоростной поезд HSR на Главном вокзале Тайбэя или в Баньцяо до станции HSR Taichung (~47 минут), а оттуда — на бесплатный шаттл Lihpao Resort (бронируется онлайн) или городской автобус №155 прямо до ворот парка!',
+    mrtStationRu: 'Скоростной поезд HSR до Тайчжуна (47 мин из Тайбэя) + бесплатный шаттл Lihpao / автобус №155',
+    recommendedDurationRu: 'Весь день (6–8 часов)',
+    tagsRu: ['Парк аттракционов', 'Тайчжун (Taizhong)', 'Американские горки', 'Аквапарк', 'Колесо обозрения'],
+  },
 };
 
 export const ITINERARIES_RU: CuratedItinerary[] = [
@@ -1517,7 +1529,10 @@ export function getLocalizedDistrict(district: string, lang: Language): string {
   return lang === 'ru' ? DISTRICT_RU[district] || district : district;
 }
 
-export function getLocalizedCity(city: 'Taipei' | 'New Taipei', lang: Language): string {
+export function getLocalizedCity(
+  city: 'Taipei' | 'New Taipei' | 'Taichung',
+  lang: Language
+): string {
   return lang === 'ru' ? CITY_RU[city] || city : city;
 }
 

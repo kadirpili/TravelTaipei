@@ -30,8 +30,8 @@ test('dataset integrity: all places have valid coordinates, Google Maps links, R
   for (const place of PLACES_DATA) {
     assert.ok(!seenIds.has(place.id), `Duplicate place id: ${place.id}`);
     seenIds.add(place.id);
-    assert.ok(place.lat > 24.8 && place.lat < 25.3, `Invalid latitude for ${place.id}`);
-    assert.ok(place.lng > 121.3 && place.lng < 122.0, `Invalid longitude for ${place.id}`);
+    assert.ok(place.lat > 24.0 && place.lat < 25.3, `Invalid latitude for ${place.id}`);
+    assert.ok(place.lng > 120.5 && place.lng < 122.0, `Invalid longitude for ${place.id}`);
     assert.ok(place.googleMapsUrl.startsWith('https://maps.google.com/?q='), `Invalid map link for ${place.id}`);
     assert.ok(PLACE_TRANSLATIONS_RU[place.id], `Missing Russian translation for ${place.id}`);
 
@@ -413,5 +413,32 @@ test('Taipei MRT metro lines and stations dataset covers all 6 color-coded lines
   const mainStation = TAIPEI_MRT_STATIONS.find((s) => s.nameZh === '台北車站');
   assert.ok(mainStation?.isTransfer, 'Expected Taipei Main Station to be marked as transfer');
 });
+
+test('Lihpao Land Resort in Taichung (Taizhong) exists and matches English, Russian, and Chinese queries', () => {
+  const xinyiBase = BASE_LOCATIONS.find((b) => b.id === 'xinyi-brownies-stay')!;
+  const lihpao = PLACES_DATA.find((p) => p.id === 'lihpao-land-taichung');
+  assert.ok(lihpao, 'Expected lihpao-land-taichung in PLACES_DATA');
+  assert.equal(lihpao.city, 'Taichung');
+
+  for (const query of ['taizhong', 'Taichung', 'amusement park', 'Lihpao', '麗寶樂園', 'Тайчжун']) {
+    const res = filterAndSortPlaces(PLACES_DATA, {
+      macroCategory: 'all',
+      subCategory: 'all',
+      district: 'all',
+      priceTier: 'all',
+      searchQuery: query,
+      savedOnly: false,
+      savedIds: [],
+      sortBy: 'featured',
+      baseLocation: xinyiBase,
+      lang: 'ru',
+    });
+    assert.ok(
+      res.some((p) => p.id === 'lihpao-land-taichung'),
+      `Expected lihpao-land-taichung to match query "${query}"`
+    );
+  }
+});
+
 
 

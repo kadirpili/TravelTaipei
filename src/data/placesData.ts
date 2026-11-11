@@ -26,7 +26,7 @@ export interface PlaceItem {
   macroCategory: Exclude<MacroCategory, 'all'>;
   subCategory: SubCategory;
   district: string;
-  city: 'Taipei' | 'New Taipei';
+  city: 'Taipei' | 'New Taipei' | 'Taichung';
   lat: number;
   lng: number;
   overview: string;
@@ -2220,6 +2220,25 @@ export const PLACES_DATA: PlaceItem[] = [
     insiderTip: 'Direct Blue Line ride from Sun Yat-Sen Memorial Hall or Taipei City Hall to Shandao Temple Exit 5. Watch the bakers slap flatbreads into glowing charcoal barrel ovens through the glass kitchen!',
     featured: true,
     tags: ['Taiwanese Breakfast', 'Soy Milk', 'Shaobing Flatbread', 'Fantuan', 'Michelin Bib Gourmand'],
+  },
+  {
+    id: 'lihpao-land-taichung',
+    name: 'Lihpao Land Resort — Taichung Amusement & Water Park (Taizhong)',
+    chineseName: '麗寶樂園渡假區 (台中后里・探索世界 / 馬拉灣 / 天空之夢摩天輪)',
+    macroCategory: 'sights',
+    subCategory: 'Views, Landmarks & Wildlife',
+    district: 'Taichung (Houli)',
+    city: 'Taichung',
+    lat: 24.3242,
+    lng: 120.6976,
+    overview: 'Taiwan’s largest amusement park and resort destination in Houli District, Taichung (Taizhong). Spans 200 hectares featuring Discovery World theme park (home to Gravity Max 搶救地心, the world’s first 90° vertical-drop tilt roller coaster), Mala Bay seasonal water park (Tsunami wave pool), the iconic 120m Sky Dream Ferris wheel (天空之夢), an Italian-style Outlet Mall, and an international karting circuit.',
+    googleMapsUrl: 'https://maps.google.com/?q=Lihpao+Land+Resort+Taichung+麗寶樂園渡假區',
+    mrtStation: 'HSR Taichung Station (47 min from Taipei) + Free Lihpao Resort Shuttle / Bus 155',
+    priceTier: '$$',
+    recommendedDuration: 'Full Day (6–8 hrs)',
+    insiderTip: 'Take the Taiwan High Speed Rail (HSR) from Taipei Main Station or Banqiao Station to HSR Taichung Station (~47 mins), then hop on the free Lihpao Resort shuttle bus (reserve online) or City Bus 155 straight to the park gates. Don’t miss the Gravity Max tilt coaster and sunset views from the Sky Dream Ferris wheel!',
+    featured: true,
+    tags: ['Amusement Park', 'Theme Park', 'Taichung', 'Taizhong', 'Lihpao Land', 'Roller Coaster', 'Water Park', 'Sky Dream Ferris Wheel'],
   },
 ];
 

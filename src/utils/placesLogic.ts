@@ -68,6 +68,10 @@ export function estimateTravelTime(distanceKm: number, lang: Language = 'ru'): s
     const mrtMins = Math.max(10, Math.round(8 + distanceKm * 2.4));
     return lang === 'ru' ? `~${mrtMins} мин на метро` : `~${mrtMins} min MRT`;
   }
+  if (distanceKm > 60) {
+    // Intercity High Speed Rail (HSR) day trip (e.g., Taichung)
+    return lang === 'ru' ? '~50 мин HSR + шаттл' : '~50 min HSR + shuttle';
+  }
   // Mountain / coastal day trips (Jiufen, Yangmingshan, Tamsui)
   const transitMins = Math.round(22 + distanceKm * 1.45);
   return lang === 'ru' ? `~${transitMins} мин транспорт` : `~${transitMins} min transit`;
@@ -78,10 +82,11 @@ export function estimateTravelTime(distanceKm: number, lang: Language = 'ru'): s
  */
 export function buildGoogleMapsDirectionsUrl(
   base: BaseLocation,
-  place: Pick<PlaceItem, 'name' | 'chineseName' | 'lat' | 'lng'>
+  place: Pick<PlaceItem, 'name' | 'chineseName' | 'lat' | 'lng'> & Partial<Pick<PlaceItem, 'city'>>
 ): string {
   const origin = `${base.lat},${base.lng}`;
-  const destination = encodeURIComponent(`${place.name} ${place.chineseName} Taipei`);
+  const citySuffix = place.city === 'Taichung' ? 'Taichung' : 'Taipei';
+  const destination = encodeURIComponent(`${place.name} ${place.chineseName} ${citySuffix}`);
   return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=transit`;
 }
 
@@ -159,7 +164,8 @@ export function filterAndSortPlaces(
         .replace(/digntaifung/g, 'din tai fung')
         .replace(/dintaifung/g, 'din tai fung')
         .replace(/noughut|noughet|nugat/g, 'nougat')
-        .replace(/snakcs|snaks/g, 'snacks');
+        .replace(/snakcs|snaks/g, 'snacks')
+        .replace(/taizhong/g, 'taichung');
 
       if (!searchableText.includes(query) && !searchableText.includes(normalizedQuery)) {
         const tokens = normalizedQuery
