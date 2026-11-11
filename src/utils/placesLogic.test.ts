@@ -442,7 +442,8 @@ test('Lihpao Land Resort in Taichung (Taizhong) exists and matches English, Russ
 });
 
 test('FESTIVE_EVENTS (Dec 22 – Jan 7) have valid placeIds, date phases, categories, and bilingual details', () => {
-  assert.ok(FESTIVE_EVENTS.length >= 10, `Expected at least 10 festive events, got ${FESTIVE_EVENTS.length}`);
+  assert.ok(FESTIVE_EVENTS.length >= 14, `Expected at least 14 festive events, got ${FESTIVE_EVENTS.length}`);
+  assert.ok(!FESTIVE_EVENTS.some((e) => e.id.includes('maokong')), 'Maokong should not be in FESTIVE_EVENTS');
   const validPlaceIds = new Set(PLACES_DATA.map((p) => p.id));
 
   for (const evt of FESTIVE_EVENTS) {

@@ -90,13 +90,15 @@ export const EventsView: React.FC<EventsViewProps> = ({
                     : 'Festive Events & Shows: Dec 22 – Jan 7'}
                 </h2>
                 <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-extrabold uppercase tracking-wide">
-                  {lang === 'ru' ? 'Тайбэй · Баньцяо · Тайчжун' : 'Taipei · New Taipei · Taichung'}
+                  {lang === 'ru'
+                    ? 'Тайбэй · Баньцяо · Таоюань · Тайчжун'
+                    : 'Taipei · New Taipei · Taoyuan · Taichung'}
                 </span>
               </div>
               <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5">
                 {lang === 'ru'
-                  ? 'Новогодний салют Тайбэй 101, рождественский городок в Баньцяо, концерты, ярмарки и запуск фонариков'
-                  : 'Taipei 101 NYE fireworks, Banqiao Christmasland, concerts, design markets & sky lanterns'}
+                  ? 'Салют Тайбэй 101, концерты Jolin Tsai, BABYMONSTER и Mayday, Christmasland в Баньцяо, бульвар Zootopia и выставки'
+                  : 'Taipei 101 NYE fireworks, Jolin Tsai, BABYMONSTER & Mayday concerts, Banqiao Christmasland & pop-up exhibitions'}
               </p>
             </div>
           </div>
