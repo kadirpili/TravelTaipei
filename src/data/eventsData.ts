@@ -3,7 +3,8 @@ export type EventCategory =
   | 'nye_countdown'
   | 'concerts_shows'
   | 'christmas_lights'
-  | 'markets_culture';
+  | 'markets_culture'
+  | 'diy_kids';
 
 export type EventDatePhase = 'all' | 'xmas_week' | 'nye_peak' | 'jan_week';
 
@@ -72,6 +73,12 @@ export const EVENT_CATEGORIES: Array<{
     labelEn: 'Exhibitions, Pop-Ups & Markets',
     labelRu: 'Выставки, поп-апы и ярмарки',
     emoji: '🎨',
+  },
+  {
+    id: 'diy_kids',
+    labelEn: 'DIY Classes & Kids Fun',
+    labelRu: 'Мастер-классы (DIY) и детям',
+    emoji: '🧁',
   },
 ];
 
@@ -755,6 +762,250 @@ export const FESTIVE_EVENTS: FestiveEventItem[] = [
     placeIds: ['dadaocheng-wharf', 'dihua-street'],
     googleMapsUrl: 'https://maps.google.com/?q=Dadaocheng+Wharf+Container+Market',
     officialUrl: 'https://www.travel.taipei/',
+  },
+  {
+    id: 'diy-pineapple-cake-kuo-yuan-ye',
+    category: 'diy_kids',
+    datePhase: ['xmas_week', 'nye_peak', 'jan_week'],
+    isMustSee: true,
+    titleEn: 'DIY Pineapple Cake & Holiday Cookie Baking Class at Kuo Yuan Ye Pastry Museum (Kids & Adults)',
+    titleRu: 'Мастер-класс (DIY): выпечка ананасовых пирожных 鳳梨酥 в Музее кондитерского искусства Kuo Yuan Ye',
+    titleZh: '郭元益糕餅博物館 (士林館) — 鳳梨酥 & 節慶餅乾手作DIY體驗',
+    dateRangeEn: 'Dec 22 – Jan 7 (Daily Morning & Afternoon Sessions)',
+    dateRangeRu: '22 декабря – 7 января (Ежедневные утренние и дневные мастер-классы)',
+    timeWindowEn: 'Sessions at 09:30 & 13:30 (2-hour hands-on baking + tea tasting)',
+    timeWindowRu: 'Сеансы в 09:30 и 13:30 (2 часа: выпечка своими руками + чаепитие)',
+    cityEn: 'Taipei · Shilin District (5 min walk from MRT Shilin)',
+    cityRu: 'Тайбэй · район Шилинь (5 минут от метро Shilin)',
+    venueEn: 'Kuo Yuan Ye Museum of Cake and Pastry (546 Wenlin Rd, Shilin)',
+    venueRu: 'Музей выпечки Kuo Yuan Ye (546 Wenlin Rd, Shilin District)',
+    venueZh: '郭元益糕餅博物館 士林館 (台北市士林區文林路546號4樓)',
+    priceBadgeEn: 'DIY Class ~NT$450 (~$14) · Kids 3+ Welcome',
+    priceBadgeRu: 'Мастер-класс ~NT$450 (~$14) · Для детей от 3 лет и взрослых',
+    descriptionEn:
+      'One of Taipei’s most joyful hands-on classes for kids, families, and adults! Hosted by historic 1867 pastry house Kuo Yuan Ye, a professional pastry chef guides you step-by-step from mixing golden butter dough and rolling sweet winter-melon/pineapple filling to stamping your own festive pineapple cakes. While your cakes bake in the oven, kids can dress up in traditional Taiwanese costumes, play interactive bakery games, and enjoy an oolong tea & pastry afternoon party!',
+    descriptionRu:
+      'Один из самых весёлых и вкусных кулинарных мастер-классов Тайбэя для детей и взрослых! В легендарном кондитерском доме Kuo Yuan Ye (основанном в 1867 году) шеф-кондитер научит вас замешивать песочное тесто на ароматном масле, заворачивать начинку из тайваньского ананаса и штамповать собственные пирожные в золотистых формах. Пока ваша выпечка румянится в печи, дети и взрослые могут примерить традиционные костюмы для фото, поиграть в интерактивном музее и устроить чаепитие с дегустацией сладостей!',
+    highlightsEn: [
+      'Bake & take home your own gift box of 10 freshly baked Taiwanese pineapple cakes (鳳梨酥) & holiday cookies',
+      'Super kid-friendly: includes mini chef aprons, traditional costume dress-up photo zone & interactive games',
+      'Includes an afternoon tea tasting platter while your batch bakes in the oven',
+    ],
+    highlightsRu: [
+      'Каждый участник уносит домой подарочную коробку из 10 горячих ананасовых пирожных и печенья, испечённых своими руками',
+      'Восторг для детей и взрослых: выдают поварские фартуки, есть фотозона с традиционными нарядами и квест-игры',
+      'В стоимость входит дегустационный сет с тайваньским чаем и свежей выпечкой, пока пирожные в духовке',
+    ],
+    proTipEn:
+      'Take the MRT Red Line to R16 Shilin Station (Exit 1, 5-min walk) — or book the ChiaTe / Kuo Yuan Ye Pineapple Cake DIY class directly via Klook!',
+    proTipRu:
+      'Доехать очень просто по красной ветке метро до станции R16 Shilin (выход 1, 5 минут пешком). Сеансы на каникулах лучше бронировать заранее на Klook или сайте музея!',
+    placeIds: ['chiate-bakery-pineapple', 'kanpai-classic-shilin'],
+    googleMapsUrl: 'https://maps.google.com/?q=Kuo+Yuan+Ye+Museum+of+Cake+and+Pastry+Shilin+Taipei',
+    officialUrl: 'https://www.kuos.com/museum/',
+  },
+  {
+    id: 'diy-wooderful-life-music-box',
+    category: 'diy_kids',
+    datePhase: ['xmas_week', 'nye_peak', 'jan_week'],
+    isMustSee: true,
+    titleEn: 'Wooderful Life: Build-Your-Own Wooden Mechanical Music Box & "Wooderful Land" Indoor Play Park',
+    titleRu: 'Wooderful Life: собери свою деревянную музыкальную шкатулку (DIY) + игровой парк «Деревянный лес»',
+    titleZh: 'Wooderful life 華山店 — 木質音樂盒手作DIY & 木育森林',
+    dateRangeEn: 'Dec 22 – Jan 7 (Open Daily 11:00–21:00)',
+    dateRangeRu: '22 декабря – 7 января (Ежедневно 11:00–21:00)',
+    timeWindowEn: 'Walk-in DIY Workshop 11:00–20:00 (Takes 45–60 mins)',
+    timeWindowRu: 'Мастерская работает с 11:00 до 20:00 (Сборка занимает 45–60 минут)',
+    cityEn: 'Taipei · Huashan 1914 Creative Park & Eslite Songyan',
+    cityRu: 'Тайбэй · парк Huashan 1914 и ТЦ Eslite Songyan (Синьи)',
+    venueEn: 'Wooderful Life Flagship Store (Huashan 1914 Building Zhong-4B & Eslite Spectrum Songyan)',
+    venueRu: 'Флагманская мастерская Wooderful Life (парк Huashan 1914 и Eslite Songyan)',
+    venueZh: 'Wooderful life 華山店 (華山1914文創園區 中4B館) / 誠品松菸店',
+    priceBadgeEn: 'DIY Music Box NT$800–1,600 · Kids & Adults',
+    priceBadgeRu: 'Музыкальная шкатулка NT$800–1,600 · Для всей семьи',
+    descriptionEn:
+      'A magical hands-on workshop loved equally by 4-year-olds, teens, and adults! Step up to a giant wall of over 100 intricately carved miniature wooden figurines (Taipei 101, Christmas trees, Santa sleighs, bubble tea cups, Ferris wheels, trains, and cute animals), pick a wind-up musical melody (from Joe Hisaishi / Studio Ghibli classics to Christmas carols), and assemble your own rotating mechanical wooden music box with instructors guiding every step.',
+    descriptionRu:
+      'Волшебная творческая мастерская, от которой в одинаковом восторге и дети от 4 лет, и взрослые! Перед вами — огромная стена с сотнями миниатюрных деревянных фигурок (башня Тайбэй 101, новогодние ёлочки, паровозики, стаканчики боба-чая, колесо обозрения, панды и котики). Вы выбираете деревянную основу, любимую механическую мелодию (от музыки из мультфильмов Миядзаки до рождественских гимнов) и под руководством мастера собираете собственную заводную шкатулку с движущимся поездом или каруселью!',
+    highlightsEn: [
+      'Choose from 100+ wooden miniatures (including Taiwan-exclusive Taipei 101, Boba Tea & Sky Lantern charms)',
+      'Magnetic hidden track mechanism makes miniature trains or skaters glide in circles as the music plays',
+      'Right next to the DIY zone is "Wooderful Land (木育森林)" — an all-wooden indoor adventure playground with 50+ wooden games & zip-lines for kids!',
+    ],
+    highlightsRu: [
+      'Более 100 деревянных миниатюр на выбор — включая эксклюзивные фигурки Тайбэй 101, боба-чая и небесных фонариков',
+      'Скрытый магнитный механизм заставляет деревянный паровозик или фигурку кружиться под выбранную мелодию',
+      'Рядом с зоной DIY работает «Деревянный лес» (木育森林) — крытый игровой парк с 50+ интерактивными деревянными аттракционами для детей!',
+    ],
+    proTipEn:
+      'You can do this at either Huashan 1914 Creative Park OR inside Eslite Spectrum Songyan (2F, just an 8-minute walk from your Xinyi stay)!',
+    proTipRu:
+      'Эта мастерская есть как в парке Huashan 1914, так и на 2-м этаже центра Eslite Spectrum Songyan (всего в 8 минутах ходьбы от вашего дома в Синьи)!',
+    placeIds: ['songshan-cultural-park', 'meet-fresh-syntrend', 'my-stay-xinyi-brownies'],
+    googleMapsUrl: 'https://maps.google.com/?q=Wooderful+Life+Huashan+1914+Taipei',
+    officialUrl: 'https://www.wooderfullife.com/',
+  },
+  {
+    id: 'diy-eslite-songyan-glass-tufting',
+    category: 'diy_kids',
+    datePhase: ['xmas_week', 'nye_peak', 'jan_week'],
+    isMustSee: true,
+    titleEn: 'Eslite Songyan Maker Village: Mouth-Blown Glass, Tufting Rugs & Pottery DIY (Kids 6+ & Adults)',
+    titleRu: 'Город мастеров в Eslite Songyan: выдувание стекла, тафтинг ковров, керамика и ювелирный DIY',
+    titleZh: '誠品生活松菸店 手作聚落：坤水晶吹玻璃・簇絨地毯・手拉坯・草山金工',
+    dateRangeEn: 'Dec 22 – Jan 7 (Open Daily 11:00–22:00)',
+    dateRangeRu: '22 декабря – 7 января (Ежедневно 11:00–22:00)',
+    timeWindowEn: 'Workshops run hourly 11:30–20:00 (1 to 2.5 hours per craft)',
+    timeWindowRu: 'Мастер-классы каждый час с 11:30 до 20:00 (длительность 1–2.5 часа)',
+    cityEn: 'Taipei · Xinyi District (8 min walk from your stay)',
+    cityRu: 'Тайбэй · район Синьи (8 минут пешком от вашего дома)',
+    venueEn: 'Eslite Spectrum Songyan Store 2F & 3F Living Project (88 Yanchang Rd)',
+    venueRu: '2-й и 3-й этажи дизайн-центра Eslite Spectrum Songyan (парк Суншань)',
+    venueZh: '誠品生活松菸店 2F–3F (台北市信義區菸廠路88號)',
+    priceBadgeEn: 'Glassblowing NT$1,380 · Tufting/Pottery NT$900–1,800',
+    priceBadgeRu: 'Стеклодув NT$1,380 · Керамика и тафтинг NT$900–1,800',
+    descriptionEn:
+      'Located just an 8-minute walk from your Xinyi stay near Brownies, the 2nd floor of Eslite Spectrum Songyan is an entire indoor "Maker Village" where kids (aged 6+) and adults can watch flames and craft real design objects: blow molten 1,300°C glass through a blowpipe at Kun’s Crystal (坤水晶), shoot colorful yarn with a tufting gun to make a fluffy cartoon rug/mirror, throw clay on a potter’s wheel, or stamp custom silver rings at Choccy Metal (草山金工).',
+    descriptionRu:
+      'Всего в 8 минутах пешком от вашего дома в Синьи весь 2-й этаж дизайн-центра Eslite Spectrum Songyan занимает настоящий «Город ремесленников»! Здесь дети (от 6 лет) и взрослые могут под руководством мастеров выдуть собственный цветной стакан или новогодний шар из раскалённого до 1300°C стекла в стеклодувной мастерской Kun’s Crystal (坤水晶), набить пушистый коврик специальным тафтинг-пистолетом, слепить кружку на гончарном круге или выковать серебряное кольцо в Choccy Metal.',
+    highlightsEn: [
+      'Kun’s Crystal Glass Studio (坤水晶): Kids (6+) & adults blow real molten glass into a colorful cup or holiday ornament!',
+      'Rug Tufting, Leathercraft & Pottery Studios: Make custom cartoon coasters, hand-painted bowls, or leather keychains',
+      'Choccy Metal (草山金工): Hammer & stamp your own custom sterling silver ring or bracelet with initials/dates',
+    ],
+    highlightsRu: [
+      'Стеклодувная студия Kun’s Crystal (坤水晶): дети (6+) и взрослые сами выдувают цветной стакан или шар из жидкого стекла у печи!',
+      'Тафтинг, кожа и гончарный круг: сделайте пушистый коврик с любимым персонажем, расписную пиалу или кожаный брелок',
+      'Ювелирная студия Choccy Metal (草山金工): выкуйте собственное серебряное кольцо или браслет с памятной гравировкой',
+    ],
+    proTipEn:
+      'Note on Glassblowing: Blown glass cools slowly overnight in the annealing kiln, so do your glassblowing class in the first days of your trip and pick it up the next day (just an 8-min walk from your stay)!',
+    proTipRu:
+      'Важный совет по стеклодувному мастер-классу: готовое горячее стекло должно остывать в печи ночь, поэтому приходите сюда в первые дни поездки, а забрать свой шедевр сможете на следующий день (всего 8 минут пешком от дома)!',
+    placeIds: ['songshan-cultural-park', 'my-stay-xinyi-brownies', 'brownies-xinyi'],
+    googleMapsUrl: 'https://maps.google.com/?q=Eslite+Spectrum+Songyan+Store+Taipei',
+    officialUrl: 'https://meet.eslite.com/',
+  },
+  {
+    id: 'diy-chun-shui-tang-boba-shaking',
+    category: 'diy_kids',
+    datePhase: ['xmas_week', 'nye_peak', 'jan_week'],
+    isMustSee: true,
+    titleEn: 'Chun Shui Tang "Little Creator" Bubble Milk Tea Hand-Shaking DIY Class (Kids & Adults)',
+    titleRu: 'Мастер-класс бариста по бабл-чаю (Bubble Tea DIY) в легендарном доме чая Chun Shui Tang',
+    titleZh: '春水堂 珍珠奶茶手搖DIY體驗課程 (小小茶師體驗)',
+    dateRangeEn: 'Dec 22 – Jan 7 (Daily Sessions by Reservation)',
+    dateRangeRu: '22 декабря – 7 января (Ежедневные сеансы по записи)',
+    timeWindowEn: '50-minute interactive session (10:30, 14:00, 16:00)',
+    timeWindowRu: 'Интерактивный урок 50 минут (сеансы 10:30, 14:00, 16:00)',
+    cityEn: 'Taipei (Xinyi / Zhongzheng) & Taichung Flagship',
+    cityRu: 'Тайбэй (Синьи / Чжунчжэн) и флагман в Тайчжуне',
+    venueEn: 'Chun Shui Tang Cultural Tea House (Xinyi A9 / National Concert Hall / Taichung)',
+    venueRu: 'Чайный дом Chun Shui Tang (Синьи A9 / Национальный концертный зал / Тайчжун)',
+    venueZh: '春水堂人文茶館 (信義A9店 / 中正店 / 台中大墩店)',
+    priceBadgeEn: 'DIY Class ~NT$520–680 (incl. Shaker Gift & Certificate)',
+    priceBadgeRu: '~NT$520–680 (включая шейкер в подарок и диплом)',
+    descriptionEn:
+      'Chun Shui Tang invented the world’s very first Pearl Milk Tea (Bubble Tea) in 1983! In their super fun 50-minute "Bubble Tea Hand-Shaking DIY Workshop", kids and adults put on an official tearista apron, learn the secret golden ratio of Assam black tea, cane sugar, ice, and chewy tapioca pearls, and dance while shaking two drinks: classic Foam Black Tea and signature Pearl Milk Tea!',
+    descriptionRu:
+      'Именно в чайном доме Chun Shui Tang в 1983 году изобрели первый в мире бабл-ти (чай с шариками тапиоки)! На весёлом 50-минутном мастер-классе дети и взрослые надевают фирменные фартуки чайных мастеров, узнают секретную пропорцию крепкого чая Ассам, тростникового сиропа, льда и тёплых жемчужин тапиоки, и сами взбивают в профессиональном шейкере два полных бокала: пенный чёрный чай и классический Pearl Milk Tea!',
+    highlightsEn: [
+      'Shake & drink 2 full-size drinks yourself: Classic Foam Black Tea + Signature Pearl Milk Tea (珍珠奶茶)',
+      'Kids & adults receive an official "Bubble Tea Master Certificate" + a souvenir Chun Shui Tang cocktail shaker to take home!',
+      'Includes warm savory snacks (famous Kung Fu noodles or golden fried radish cake) after shaking your tea',
+    ],
+    highlightsRu: [
+      'Каждый участник сам готовит в шейкере 2 больших напитка: классический пенный чай и фирменный бабл-ти с тапиокой',
+      'Всем детям и взрослым вручают именной «Диплом мастера Bubble Tea» и дарят фирменный шейкер Chun Shui Tang на память!',
+      'После урока подают горячие закуски — знаменитую лапшу Кунг-Фу или хрустящий редьковый пирог',
+    ],
+    proTipEn:
+      'You can book the Taipei Chun Shui Tang Bubble Tea DIY experience easily on Klook, or join at their Taichung flagship if you are visiting Taichung / Lihpao Land!',
+    proTipRu:
+      'Записаться на мастер-класс Chun Shui Tang в Тайбэе проще всего через Klook, либо можно посетить их исторический флагман во время поездки в Тайчжун!',
+    placeIds: ['chun-shui-tang-xinyi', 'my-stay-xinyi-brownies'],
+    googleMapsUrl: 'https://maps.google.com/?q=Chun+Shui+Tang+Shin+Kong+Mitsukoshi+A9+Xinyi+Taipei',
+    officialUrl: 'https://www.chunshuitang.com.tw/',
+  },
+  {
+    id: 'diy-home-baking-day-christmas-cake',
+    category: 'diy_kids',
+    datePhase: ['xmas_week', 'nye_peak', 'jan_week'],
+    titleEn: 'Home.焙小日子 & Funsiamo: Zero-Cleanup Christmas Cake & Cartoon Cupcake DIY Studio (Kids & Families)',
+    titleRu: 'Home.焙小日子 (Home Baking Day): семейная DIY-студия рождественских тортов и капкейков без мытья посуды',
+    titleZh: 'Home.焙小日子 & Funsiamo 玩美烘焙體驗 — 聖誕跨年限定蛋糕手作DIY',
+    dateRangeEn: 'Dec 22 – Jan 7 (Daily 10:00–21:00)',
+    dateRangeRu: '22 декабря – 7 января (Ежедневно 10:00–21:00)',
+    timeWindowEn: '2-hour self-guided tablet baking session (Walk-in or Online Booking)',
+    timeWindowRu: '2-часовой сеанс выпечки и декора по планшету (с 10:00 до 21:00)',
+    cityEn: 'Taipei · Zhongshan / Taipei Main Station (Q Square) & New Taipei',
+    cityRu: 'Тайбэй · метро Zhongshan / вокзал Taipei Main (Q Square)',
+    venueEn: 'Home Baking Day (Home.焙小日子 Zhongshan) & Funsiamo (Q Square Mall 2F)',
+    venueRu: 'Студии кулинарного DIY Home.焙小日子 (Чжуншань) и Funsiamo (ТЦ Q Square, 2 этаж)',
+    venueZh: 'Home.焙小日子 / Funsiamo 京站時尚廣場店',
+    priceBadgeEn: 'NT$580–1,180 per Cake (1 Adult + 1 Kid can share!)',
+    priceBadgeRu: 'NT$580–1,180 за торт (можно делать вдвоём с ребёнком!)',
+    descriptionEn:
+      'A huge hit with families in Taipei! Walk into a bright, pastel-colored kitchen studio, choose from 40+ festive winter desserts on an iPad (strawberry Santa cakes, matcha Christmas trees, reindeer cupcakes, or bear macarons), and gather your pre-measured ingredients. Kids love mixing with colorful stand mixers and piping frostings while friendly instructors help out—and best of all, the staff washes all the dirty bowls and pans for you!',
+    descriptionRu:
+      'Настоящий хит среди семей с детьми в Тайбэе! В светлой пастельной студии вы выбираете один из 40+ праздничных рецептов на планшете iPad (клубничный торт со снеговиком, новогодняя ёлочка с матча, капкейки-олени или фигурные макаронс), набираете ингредиенты по списку и творите за собственной станцией с цветным миксером KitchenAid. Дети в восторге от украшения кремом и посыпками, а главный плюс для родителей — всю грязную посуду моет персонал студии!',
+    highlightsEn: [
+      'Special Dec 22 – Jan 7 Holiday Menu: Strawberry Santa Cake, Matcha Christmas Tree Tart & Reindeer Cupcakes',
+      '100% stress-free for parents: colorful kid-sized aprons, step-by-step video tablet guide & zero dishwashing!',
+      'Packaged in a gorgeous transparent ribbon box to bring back to your Xinyi apartment for dessert',
+    ],
+    highlightsRu: [
+      'Специальное зимнее меню (22 дек – 7 янв): клубничные торты со снеговиками, ёлочки из матча и капкейки-олени',
+      'Никаких хлопот для родителей: детские фартуки, пошаговые видео на планшете, помощь кондитеров и ноль мытья посуды!',
+      'Готовый торт упаковывают в красивую прозрачную коробку с лентой — идеальный десерт домой в Синьи',
+    ],
+    proTipEn:
+      'Located right inside Q Square Mall at Taipei Main Station (or near Zhongshan MRT) — super easy to combine with the Zhongshan "Zootopia" Christmas Market!',
+    proTipRu:
+      'Студии находятся прямо у станции метро Zhongshan и в ТЦ Q Square (Taipei Main Station) — идеально совместить с прогулкой по световому бульвару Zootopia!',
+    placeIds: ['haidilao-q-square', 'dubu-house-breeze-station'],
+    googleMapsUrl: 'https://maps.google.com/?q=Q+Square+Taipei+Main+Station',
+    officialUrl: 'https://www.funsiamo.com/',
+  },
+  {
+    id: 'diy-yingge-pottery-wheel-kids',
+    category: 'diy_kids',
+    datePhase: ['xmas_week', 'nye_peak', 'jan_week'],
+    titleEn: 'Yingge Ceramics Museum "Kids Clay Wonderland" & Old Street Potter’s Wheel DIY',
+    titleRu: 'Гончарная столица Инге (Yingge): детская студия глины в Музее керамики и гончарный круг (DIY)',
+    titleZh: '鶯歌陶瓷博物館《小陶窩親子體驗》& 鶯歌老街手拉坯DIY',
+    dateRangeEn: 'Dec 22 – Jan 7 (Open Daily except Jan 1 & Mondays)',
+    dateRangeRu: '22 декабря – 7 января (Ежедневно, кроме Пн и 1 янв)',
+    timeWindowEn: '09:30 – 17:00 (Old Street pottery studios open daily 10:00–18:30)',
+    timeWindowRu: '09:30 – 17:00 (Гончарные мастерские на Старой улице до 18:30)',
+    cityEn: 'New Taipei City · Yingge (18 min by TRA train from Banqiao / 28 min from Taipei)',
+    cityRu: 'Новый Тайбэй · Инге (18 мин на поезде от Баньцяо / 28 мин от Тайбэя)',
+    venueEn: 'New Taipei City Yingge Ceramics Museum & Shu’s Pottery on Yingge Old Street',
+    venueRu: 'Музей керамики Инге (детский центр «Little Clay Nest») и мастерские Старой улицы Инге',
+    venueZh: '新北市立鶯歌陶瓷博物館 / 鶯歌陶瓷老街 (新旺集瓷)',
+    priceBadgeEn: 'Museum Kids Clay NT$100–150 · Potter’s Wheel NT$250–390',
+    priceBadgeRu: 'Детская лепка NT$100–150 · Гончарный круг NT$250–390',
+    descriptionEn:
+      'Known as the "Pottery Capital of Taiwan", Yingge is just an 18-minute train ride from Banqiao (or 28 mins from Taipei Main Station). In the basement of the stunning glass-and-concrete Yingge Ceramics Museum sits "Little Clay Nest (小陶窩)" — a dedicated children’s clay playland and themed winter ornament workshop. Right outside on cobblestoned Yingge Old Street, kids and adults can sit at an electric potter’s wheel at Shu’s Pottery (新旺集瓷), spin wet clay into a custom mug or bowl, and paint colourful mosaic coasters to take home the same day!',
+    descriptionRu:
+      'Всего в 18 минутах на обычном поезде от Баньцяо (или 28 минутах от Taipei Main Station) находится городок Инге — «Гончарная столица Тайваня». В цокольном этаже впечатляющего Музея керамики работает детский интерактивный центр «Глиняное гнёздышко» (小陶窩) с зимними мастер-классами по лепке для малышей и школьников. А на соседней мощёной Старой улице Инге (в исторической мастерской Shu’s Pottery / 新旺集瓷) дети и взрослые садятся за настоящий гончарный круг, вытягивают из глины свою чашку или делают мозаичную подставку, которую можно забрать домой в тот же день!',
+    highlightsEn: [
+      'Hands-on electric potter’s wheel (手拉坯): Shape wet clay into your own cup or bowl with 1-on-1 master help',
+      'Same-day takeaway option: Ceramic mosaic coasters, pottery decal transferring & hand-painted figurines',
+      'Yingge Ceramics Museum features a dedicated "Little Clay Nest" children’s studio & sculpture park',
+    ],
+    highlightsRu: [
+      'Настоящий гончарный круг (手拉坯): вытяните собственную пиалу или кружку из мягкой глины с помощью мастера',
+      'Поделки, которые можно забрать сразу в тот же день: мозаика из керамической плитки, роспись фигурок и деколь',
+      'В Музее керамики работает специальная детская игровая лаборатория глины «Little Clay Nest (小陶窩)»',
+    ],
+    proTipEn:
+      'Since fired pottery takes 2–3 weeks, choose the "Ceramic Decal Transfer" or "Mosaic Coaster DIY" on Yingge Old Street if you want to take your finished craft home the very same afternoon (plus studios ship fired wheel-thrown bowls internationally)!',
+    proTipRu:
+      'Так как обжиг сырой глины занимает около 2 недель, на Старой улице Инге можно выбрать мастер-класс по керамической мозаике или росписи глазурью (забираете сразу!), либо заказать международную доставку вашей обожжённой чашки с гончарного круга!',
+    placeIds: ['google-tpkd-office', 'oh-my-yakiyan-banqiao'],
+    googleMapsUrl: 'https://maps.google.com/?q=Yingge+Ceramics+Museum+New+Taipei',
+    officialUrl: 'https://www.ceramics.ntpc.gov.tw/',
   },
 ];
 

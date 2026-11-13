@@ -86,8 +86,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
               <div className="flex items-center gap-1.5 flex-wrap">
                 <h2 className="font-display text-sm sm:text-lg font-bold text-slate-900">
                   {lang === 'ru'
-                    ? 'События и фестивали: 22 декабря – 7 января'
-                    : 'Festive Events & Shows: Dec 22 – Jan 7'}
+                    ? 'События, фестивали и мастер-классы (DIY): 22 дек – 7 янв'
+                    : 'Festive Events, Concerts & DIY Classes: Dec 22 – Jan 7'}
                 </h2>
                 <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-extrabold uppercase tracking-wide">
                   {lang === 'ru'
@@ -97,8 +97,8 @@ export const EventsView: React.FC<EventsViewProps> = ({
               </div>
               <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5">
                 {lang === 'ru'
-                  ? 'Салют Тайбэй 101, концерты Jolin Tsai, BABYMONSTER и Mayday, Christmasland в Баньцяо, бульвар Zootopia и выставки'
-                  : 'Taipei 101 NYE fireworks, Jolin Tsai, BABYMONSTER & Mayday concerts, Banqiao Christmasland & pop-up exhibitions'}
+                  ? 'Салют Тайбэй 101, концерты Jolin Tsai и BABYMONSTER, Christmasland, плюс мастер-классы (DIY) для детей и взрослых: выпечка 鳳梨酥, музыкальные шкатулки, стеклодув и Bubble Tea!'
+                  : 'Taipei 101 NYE fireworks, Jolin Tsai & BABYMONSTER concerts, Banqiao Christmasland, plus fun DIY classes for kids & adults (pineapple cake baking, wooden music boxes, glassblowing & bubble tea shaking)!'}
               </p>
             </div>
           </div>

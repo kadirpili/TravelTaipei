@@ -470,6 +470,12 @@ test('FESTIVE_EVENTS (Dec 22 – Jan 7) have valid placeIds, date phases, catego
 
   const christmaslandQuery = filterFestiveEvents(FESTIVE_EVENTS, 'all', 'all', 'Banqiao');
   assert.ok(christmaslandQuery.some((e) => e.id === 'new-taipei-christmasland-banqiao'));
+
+  const diyClasses = filterFestiveEvents(FESTIVE_EVENTS, 'diy_kids', 'all', '');
+  assert.equal(diyClasses.length, 6, 'Expected 6 DIY & Kids workshops');
+  assert.ok(diyClasses.some((e) => e.id === 'diy-pineapple-cake-kuo-yuan-ye'));
+  assert.ok(diyClasses.some((e) => e.id === 'diy-wooderful-life-music-box'));
+  assert.ok(diyClasses.some((e) => e.id === 'diy-eslite-songyan-glass-tufting'));
 });
 
 
