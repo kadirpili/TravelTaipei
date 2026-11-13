@@ -117,6 +117,7 @@ export const UI_STRINGS = {
     navTours: 'Туры Klook',
     navSnacks: 'Что попробовать (Снэки и Боба)',
     navEvents: '🎉 События (22 дек–7 янв)',
+    navActivities: '💆 Активности',
     savedTripBtn: (count: number) => `Избранное (${count})`,
     viewingSavedBtn: (count: number) => `Избранное (${count}) ✓`,
     searchPlaceholder: (count: number) =>
@@ -148,6 +149,7 @@ export const UI_STRINGS = {
     mobileNavTours: 'Туры',
     mobileNavSnacks: 'Хиты еды',
     mobileNavEvents: 'События',
+    mobileNavActivities: 'Активности',
     // Map labels
     pinsCount: (count: number) => `${count} точек`,
     legendSights: 'Места',
@@ -226,6 +228,7 @@ export const UI_STRINGS = {
     navTours: 'Tours (Klook)',
     navSnacks: 'Must-Try Snacks',
     navEvents: '🎉 Events (Dec 22–Jan 7)',
+    navActivities: '💆 Activities',
     savedTripBtn: (count: number) => `Saved Trip (${count})`,
     viewingSavedBtn: (count: number) => `Viewing Saved (${count})`,
     searchPlaceholder: (count: number) =>
@@ -257,6 +260,7 @@ export const UI_STRINGS = {
     mobileNavTours: 'Tours',
     mobileNavSnacks: 'Snacks',
     mobileNavEvents: 'Events',
+    mobileNavActivities: 'Activities',
     // Map labels
     pinsCount: (count: number) => `${count} ${count === 1 ? 'Pin' : 'Pins'}`,
     legendSights: 'Sights',
@@ -1347,6 +1351,36 @@ export const PLACE_TRANSLATIONS_RU: Record<string, PlaceTranslationRu> = {
     mrtStationRu: 'Скоростной поезд HSR до Тайчжуна (47 мин из Тайбэя) + бесплатный шаттл Lihpao / автобус №155',
     recommendedDurationRu: 'Весь день (6–8 часов)',
     tagsRu: ['Парк аттракционов', 'Тайчжун (Taizhong)', 'Американские горки', 'Аквапарк', 'Колесо обозрения'],
+  },
+  'six-star-foot-massage': {
+    nameRu: 'Центр тайваньского массажа стоп 6 Star Foot Massage — филиал у Мэрии (台北六星集足體養生會館・市府會館)',
+    overviewRu:
+      'Лучший спа-центр традиционного тайваньского рефлекторного массажа стоп и точечного массажа тела в районе Синьи (всего в 9 минутах пешком от вашего дома у Brownies). Сеанс начинается с 10-минутной горячей ванночки для ног с морской солью и травами и одновременного массажа шеи и плеч, за которыми следуют 50 минут глубокой проработки меридианов стоп и чашка органического травяного чая.',
+    insiderTipRu:
+      'Работает ежедневно с 09:00 утра до 01:00 ночи! Идеальное место, чтобы зайти вечером после долгих прогулок или ночного рынка.',
+    mrtStationRu: 'Станция Taipei City Hall (Синяя ветка BL18, выход 1 — 2 минуты пешком)',
+    recommendedDurationRu: '60–90 минут',
+    tagsRu: ['Массаж стоп', 'Тайваньский рефлексомассаж', 'Спа и отдых', 'Синьи'],
+  },
+  'taipei-knife-massage': {
+    nameRu: 'Всемирная ассоциация массажа ножами — древняя терапия Дао-Ляо (中華世界刀療協會・台北地下街 Y16)',
+    overviewRu:
+      'Знаменитый центр древнего 2000-летнего тайваньского «массажа ножами» (刀療 Дао-Ляо) в подземной галерее Taipei City Mall у выхода Y16. Мастера используют два тяжёлых, полностью затупленных стальных тесака и ритмично простукивают тело через плотное полотно, создавая глубокую низкочастотную вибрацию, которая мгновенно снимает мышечные зажимы.',
+    insiderTipRu:
+      'Принимают без записи! Лезвия полностью затуплены и безопасны. Можно попробовать 10-минутный экспресс-сеанс на плечи (NT$350) или полный 30-минутный массаж (~NT$1,000).',
+    mrtStationRu: 'Вокзал Taipei Main Station / Beimen (подземная улица Taipei City Mall, выход Y16)',
+    recommendedDurationRu: '20–40 минут',
+    tagsRu: ['Массаж ножами', 'Дао-Ляо (刀療)', 'Необычный опыт', 'Традиционная терапия'],
+  },
+  'xin-chao-shrimp-fishing': {
+    nameRu: 'Крытый клуб ловли креветок и гриль Quan Jia Le / Xin Chao (全佳樂釣蝦場・新潮釣蝦)',
+    overviewRu:
+      'Аутентичное тайваньское вечернее развлечение в районе Чжуншань! Арендуйте бамбуковую удочку на час (~NT$350–400 включая наживку), ловите гигантских пресноводных креветок в крытом бассейне вместе с местными жителями, а затем обваляйте улов в крупной морской соли и сами запеките креветок в раскалённой печи прямо в зале.',
+    insiderTipRu:
+      'Когда поплавок уходит под воду, подождите 3–4 секунды и плавно подсекайте вбок! Соль, шпажки и печь для запекания улова предоставляются бесплатно.',
+    mrtStationRu: 'Станция Xingtian Temple (Оранжевая ветка O09, выход 4 — 5 минут пешком)',
+    recommendedDurationRu: '1–2 часа',
+    tagsRu: ['Ловля креветок', 'Гриль на соли', 'Местный колорит', 'Ночная жизнь'],
   },
 };
 

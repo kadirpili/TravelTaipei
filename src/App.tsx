@@ -32,9 +32,11 @@ import { ItineraryView } from './components/ItineraryView';
 import { ToursView } from './components/ToursView';
 import { SnacksView } from './components/SnacksView';
 import { EventsView } from './components/EventsView';
+import { ActivitiesView } from './components/ActivitiesView';
 import { BOOKABLE_TOURS } from './data/toursData';
 import { MUST_TRY_SNACKS } from './data/snacksData';
 import { FESTIVE_EVENTS } from './data/eventsData';
+import { TAIWAN_ACTIVITIES } from './data/activitiesData';
 import { OfflineControlBar } from './components/OfflineControlBar';
 import {
   loadOfflineSnapshot,
@@ -52,6 +54,7 @@ import {
   RotateCcw,
   Search,
   SlidersHorizontal,
+  Sparkles,
   Ticket,
   Utensils,
   X,
@@ -64,6 +67,7 @@ type ActiveTab =
   | 'tea_nightlife'
   | 'snacks'
   | 'events'
+  | 'activities'
   | 'itineraries'
   | 'tours';
 type MobileLayoutMode = 'split' | 'list' | 'map';
@@ -133,6 +137,9 @@ export default function App() {
   );
   const [activeEventId, setActiveEventId] = useState<string>(
     FESTIVE_EVENTS[0].id
+  );
+  const [activeActivityId, setActiveActivityId] = useState<string>(
+    TAIWAN_ACTIVITIES[0].id
   );
 
   // Filter & Sort States
@@ -275,6 +282,16 @@ export default function App() {
         .filter((p): p is EnrichedPlaceItem => Boolean(p));
     }
 
+    if (activeTab === 'activities') {
+      const currentActivity =
+        TAIWAN_ACTIVITIES.find((ac) => ac.id === activeActivityId) ??
+        TAIWAN_ACTIVITIES[0];
+      const placeMap = new Map(allEnrichedPlaces.map((p) => [p.id, p]));
+      return currentActivity.placeIds
+        .map((pid) => placeMap.get(pid))
+        .filter((p): p is EnrichedPlaceItem => Boolean(p));
+    }
+
     if (activeTab === 'tours') {
       const currentTour =
         BOOKABLE_TOURS.find((tr) => tr.id === activeTourId) ?? BOOKABLE_TOURS[0];
@@ -309,6 +326,7 @@ export default function App() {
     activeTab,
     activeSnackId,
     activeEventId,
+    activeActivityId,
     activeTourId,
     activeItineraryId,
     allEnrichedPlaces,
@@ -357,6 +375,17 @@ export default function App() {
       return orderMap;
     }
 
+    if (activeTab === 'activities') {
+      const currentActivity =
+        TAIWAN_ACTIVITIES.find((ac) => ac.id === activeActivityId) ??
+        TAIWAN_ACTIVITIES[0];
+      const orderMap = new Map<string, number>();
+      currentActivity.placeIds.forEach((pid, index) => {
+        orderMap.set(pid, index + 1);
+      });
+      return orderMap;
+    }
+
     if (activeTab === 'tours') {
       const currentTour =
         BOOKABLE_TOURS.find((tr) => tr.id === activeTourId) ?? BOOKABLE_TOURS[0];
@@ -376,7 +405,7 @@ export default function App() {
       orderMap.set(stop.placeId, index + 1);
     });
     return orderMap;
-  }, [activeTab, activeSnackId, activeEventId, activeTourId, activeItineraryId]);
+  }, [activeTab, activeSnackId, activeEventId, activeActivityId, activeTourId, activeItineraryId]);
 
   const selectedPlace = useMemo(
     () =>
@@ -404,6 +433,14 @@ export default function App() {
         FESTIVE_EVENTS.find((ev) => ev.id === activeEventId) ?? FESTIVE_EVENTS[0];
       if (currentEvent.placeIds[0]) {
         setSelectedPlaceId(currentEvent.placeIds[0]);
+      }
+    }
+    if (tab === 'activities') {
+      const currentActivity =
+        TAIWAN_ACTIVITIES.find((ac) => ac.id === activeActivityId) ??
+        TAIWAN_ACTIVITIES[0];
+      if (currentActivity.placeIds[0]) {
+        setSelectedPlaceId(currentActivity.placeIds[0]);
       }
     }
   };
@@ -572,6 +609,17 @@ export default function App() {
           </button>
           <button
             type="button"
+            onClick={() => handleTabChange('activities')}
+            className={`py-1 transition-colors whitespace-nowrap shrink-0 border-b-2 ${
+              activeTab === 'activities'
+                ? 'border-teal-700 text-teal-800 font-bold'
+                : 'border-transparent text-teal-900 hover:text-slate-900 font-semibold'
+            }`}
+          >
+            {t.navActivities}
+          </button>
+          <button
+            type="button"
             onClick={() => handleTabChange('snacks')}
             className={`py-1 transition-colors whitespace-nowrap shrink-0 border-b-2 ${
               activeTab === 'snacks'
@@ -678,7 +726,8 @@ export default function App() {
                 activeTab === 'itineraries' ||
                 activeTab === 'tours' ||
                 activeTab === 'snacks' ||
-                activeTab === 'events'
+                activeTab === 'events' ||
+                activeTab === 'activities'
               ) {
                 setActiveTab('all');
               }
@@ -790,21 +839,23 @@ export default function App() {
                 value={
                   activeTab === 'events'
                     ? 'tab:events'
-                    : activeTab === 'snacks'
-                      ? 'tab:snacks'
-                      : activeTab === 'tours'
-                        ? 'tab:tours'
-                        : activeTab === 'itineraries'
-                          ? 'tab:itineraries'
-                          : personalHubsOnly
-                            ? 'preset:myhubs'
-                            : savedOnly
-                              ? 'preset:saved'
-                              : subCategory !== 'all'
-                                ? `sub:${subCategory}`
-                                : activeTab !== 'all'
-                                  ? `tab:${activeTab}`
-                                  : 'all'
+                    : activeTab === 'activities'
+                      ? 'tab:activities'
+                      : activeTab === 'snacks'
+                        ? 'tab:snacks'
+                        : activeTab === 'tours'
+                          ? 'tab:tours'
+                          : activeTab === 'itineraries'
+                            ? 'tab:itineraries'
+                            : personalHubsOnly
+                              ? 'preset:myhubs'
+                              : savedOnly
+                                ? 'preset:saved'
+                                : subCategory !== 'all'
+                                  ? `sub:${subCategory}`
+                                  : activeTab !== 'all'
+                                    ? `tab:${activeTab}`
+                                    : 'all'
                 }
                 onChange={(e) => {
                   const val = e.target.value;
@@ -832,7 +883,8 @@ export default function App() {
                       activeTab === 'tours' ||
                       activeTab === 'itineraries' ||
                       activeTab === 'snacks' ||
-                      activeTab === 'events'
+                      activeTab === 'events' ||
+                      activeTab === 'activities'
                     ) {
                       setActiveTab('all');
                     }
@@ -857,6 +909,11 @@ export default function App() {
                     {lang === 'ru'
                       ? `🎉 События 22 дек – 7 янв (${FESTIVE_EVENTS.length})`
                       : `🎉 Events Dec 22 – Jan 7 (${FESTIVE_EVENTS.length})`}
+                  </option>
+                  <option value="tab:activities">
+                    {lang === 'ru'
+                      ? `💆 Активности: массаж, чай, креветки (${TAIWAN_ACTIVITIES.length})`
+                      : `💆 Activities: Massage, Tea & Local Fun (${TAIWAN_ACTIVITIES.length})`}
                   </option>
                   <option value="tab:snacks">
                     {lang === 'ru'
@@ -914,7 +971,8 @@ export default function App() {
             {activeTab !== 'itineraries' &&
               activeTab !== 'tours' &&
               activeTab !== 'snacks' &&
-              activeTab !== 'events' && (
+              activeTab !== 'events' &&
+              activeTab !== 'activities' && (
                 <div className="flex items-center bg-slate-50 border border-slate-200 rounded-xl px-1.5 sm:px-2 min-h-[34px] sm:min-h-[38px] flex-1 min-w-0 sm:w-auto lg:max-w-[185px] order-3">
                   <label htmlFor="district-filter-select" className="sr-only">
                     {t.districtLabel}
@@ -1015,7 +1073,8 @@ export default function App() {
             {activeTab !== 'itineraries' &&
               activeTab !== 'tours' &&
               activeTab !== 'snacks' &&
-              activeTab !== 'events' && (
+              activeTab !== 'events' &&
+              activeTab !== 'activities' && (
                 <div className="hidden sm:flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-xl px-2.5 min-h-[38px] sm:w-auto lg:max-w-[175px] order-7">
                   <ListFilter className="w-3.5 h-3.5 text-slate-500 shrink-0" />
                   <label htmlFor="sort-mode-select" className="sr-only">
@@ -1101,13 +1160,15 @@ export default function App() {
                 routeFitKey={
                   activeTab === 'events'
                     ? `event-${activeEventId}`
-                    : activeTab === 'snacks'
-                      ? `snack-${activeSnackId}`
-                      : activeTab === 'tours'
-                        ? `tour-${activeTourId}`
-                        : activeTab === 'itineraries'
-                          ? `itinerary-${activeItineraryId}`
-                          : undefined
+                    : activeTab === 'activities'
+                      ? `activity-${activeActivityId}`
+                      : activeTab === 'snacks'
+                        ? `snack-${activeSnackId}`
+                        : activeTab === 'tours'
+                          ? `tour-${activeTourId}`
+                          : activeTab === 'itineraries'
+                            ? `itinerary-${activeItineraryId}`
+                            : undefined
                 }
                 lang={lang}
                 mobileLayout={mobileLayout}
@@ -1118,7 +1179,7 @@ export default function App() {
             </div>
           </div>
 
-          {/* Left Directory / Events / Snacks / Tours / Itinerary Column */}
+          {/* Left Directory / Events / Activities / Snacks / Tours / Itinerary Column */}
           <div
             className={`lg:col-span-6 lg:order-1 ${
               mobileLayout === 'map' ? 'hidden lg:block' : 'block'
@@ -1132,6 +1193,21 @@ export default function App() {
                   setActiveEventId(evt.id);
                   if (evt.placeIds[0]) {
                     setSelectedPlaceId(evt.placeIds[0]);
+                  }
+                }}
+                onSelectPlaceOnMap={handleSelectPlaceOnMap}
+                onOpenPlaceDetail={(place) => setDetailModalPlace(place)}
+                lang={lang}
+                externalSearchQuery={searchQuery}
+              />
+            ) : activeTab === 'activities' ? (
+              <ActivitiesView
+                allPlaces={allEnrichedPlaces}
+                activeActivityId={activeActivityId}
+                onSelectActivity={(act) => {
+                  setActiveActivityId(act.id);
+                  if (act.placeIds[0]) {
+                    setSelectedPlaceId(act.placeIds[0]);
                   }
                 }}
                 onSelectPlaceOnMap={handleSelectPlaceOnMap}
@@ -1431,6 +1507,24 @@ export default function App() {
 
         <button
           type="button"
+          onClick={() => handleTabChange('activities')}
+          className={`h-full flex flex-col items-center justify-center transition-colors relative ${
+            activeTab === 'activities'
+              ? 'text-teal-800 font-bold'
+              : 'text-slate-500 hover:text-slate-900'
+          }`}
+        >
+          {activeTab === 'activities' && (
+            <span className="absolute top-0 inset-x-2 h-0.5 bg-teal-700 rounded-b-full" />
+          )}
+          <Sparkles className="w-4 h-4" />
+          <span className="text-[10px] mt-0.5 whitespace-nowrap">
+            {t.mobileNavActivities}
+          </span>
+        </button>
+
+        <button
+          type="button"
           onClick={() => handleTabChange('snacks')}
           className={`h-full flex flex-col items-center justify-center transition-colors relative ${
             activeTab === 'snacks'
@@ -1467,30 +1561,14 @@ export default function App() {
 
         <button
           type="button"
-          onClick={() => handleTabChange('tours')}
-          className={`h-full flex flex-col items-center justify-center transition-colors relative ${
-            activeTab === 'tours'
-              ? 'text-amber-800 font-bold'
-              : 'text-slate-500 hover:text-slate-900'
-          }`}
-        >
-          {activeTab === 'tours' && (
-            <span className="absolute top-0 inset-x-2 h-0.5 bg-amber-700 rounded-b-full" />
-          )}
-          <Ticket className="w-4 h-4" />
-          <span className="text-[10px] mt-0.5 whitespace-nowrap">{t.mobileNavTours}</span>
-        </button>
-
-        <button
-          type="button"
           onClick={() => handleTabChange('itineraries')}
           className={`h-full flex flex-col items-center justify-center transition-colors relative ${
-            activeTab === 'itineraries' || activeTab === 'sights'
+            activeTab === 'itineraries' || activeTab === 'sights' || activeTab === 'tours'
               ? 'text-amber-800 font-bold'
               : 'text-slate-500 hover:text-slate-900'
           }`}
         >
-          {(activeTab === 'itineraries' || activeTab === 'sights') && (
+          {(activeTab === 'itineraries' || activeTab === 'sights' || activeTab === 'tours') && (
             <span className="absolute top-0 inset-x-2 h-0.5 bg-amber-700 rounded-b-full" />
           )}
           <Calendar className="w-4 h-4" />

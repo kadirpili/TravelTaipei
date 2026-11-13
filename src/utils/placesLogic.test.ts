@@ -22,6 +22,7 @@ import { getLocalizedPlaceText, PLACE_TRANSLATIONS_RU } from '../data/translatio
 import { BOOKABLE_TOURS } from '../data/toursData';
 import { filterMustTrySnacks, MUST_TRY_SNACKS } from '../data/snacksData';
 import { FESTIVE_EVENTS, filterFestiveEvents } from '../data/eventsData';
+import { TAIWAN_ACTIVITIES, filterTaiwanActivities } from '../data/activitiesData';
 import { TAIPEI_MRT_LINES, TAIPEI_MRT_STATIONS } from '../data/taipeiMrtData';
 
 test('dataset integrity: all places have valid coordinates, Google Maps links, Russian translations, and local photographs', () => {
@@ -477,6 +478,29 @@ test('FESTIVE_EVENTS (Dec 22 – Jan 7) have valid placeIds, date phases, catego
   assert.ok(diyClasses.some((e) => e.id === 'diy-wooderful-life-music-box'));
   assert.ok(diyClasses.some((e) => e.id === 'diy-eslite-songyan-glass-tufting'));
 });
+
+test('TAIWAN_ACTIVITIES cover foot massage, knife massage, tea ceremonies, shrimp fishing, and map to valid placeIds', () => {
+  assert.equal(TAIWAN_ACTIVITIES.length, 12);
+  const validPlaceIds = new Set(PLACES_DATA.map((p) => p.id));
+
+  for (const act of TAIWAN_ACTIVITIES) {
+    assert.ok(act.titleEn.length > 0 && act.titleRu.length > 0, `Activity ${act.id} missing bilingual title`);
+    assert.ok(act.titleZh.length > 0, `Activity ${act.id} missing Chinese title`);
+    assert.ok(act.venueZh.length > 0, `Activity ${act.id} missing Chinese venue phrase`);
+    assert.ok(act.stepByStepEn.length >= 2 && act.stepByStepRu.length >= 2, `Activity ${act.id} missing step-by-step guide`);
+    assert.ok(act.placeIds.length >= 1, `Activity ${act.id} must link to at least 1 map placeId`);
+    for (const pid of act.placeIds) {
+      assert.ok(validPlaceIds.has(pid), `Activity ${act.id} references unknown placeId "${pid}"`);
+    }
+  }
+
+  assert.ok(filterTaiwanActivities(TAIWAN_ACTIVITIES, 'all', 'foot massage').some((a) => a.id === 'taiwanese-foot-reflexology-6star'));
+  assert.ok(filterTaiwanActivities(TAIWAN_ACTIVITIES, 'all', 'knife').some((a) => a.id === 'ancient-knife-massage-daoliao'));
+  assert.ok(filterTaiwanActivities(TAIWAN_ACTIVITIES, 'all', '刀療').some((a) => a.id === 'ancient-knife-massage-daoliao'));
+  assert.ok(filterTaiwanActivities(TAIWAN_ACTIVITIES, 'tea_culture', '').length >= 3);
+  assert.ok(filterTaiwanActivities(TAIWAN_ACTIVITIES, 'all', 'shrimp').some((a) => a.id === 'indoor-shrimp-fishing-grill'));
+});
+
 
 
 

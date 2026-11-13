@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "syncedAt": "2026-11-11T09:30:00.000Z",
-  "placesCount": 118,
+  "syncedAt": "2026-11-13T09:03:29.337Z",
+  "placesCount": 121,
   "savedIds": [
     "taipei-101",
     "din-tai-fung-101",
@@ -2581,6 +2581,82 @@
         "Roller Coaster",
         "Water Park",
         "Sky Dream Ferris Wheel"
+      ]
+    },
+    {
+      "id": "six-star-foot-massage",
+      "name": "6 Star Foot Massage Center — Taipei City Hall Branch (Xinyi)",
+      "chineseName": "台北六星集足體養生會館 (市府會館・腳底按摩)",
+      "macroCategory": "sights",
+      "subCategory": "Cultural & Universities",
+      "district": "Xinyi",
+      "city": "Taipei",
+      "lat": 25.0415,
+      "lng": 121.5648,
+      "overview": "Taipei’s premier villa-style Taiwanese foot reflexology and full-body meridian acupressure sanctuary (just a 9-minute walk from your Xinyi stay near Brownies). Famous for its 10-minute warm sea-salt herbal foot soak with simultaneous shoulder/neck massage, 50-minute deep reflexology, and complimentary freshly brewed organic herbal tea.",
+      "googleMapsUrl": "https://maps.google.com/?q=6+Star+Foot+Massage+Taipei+City+Hall+台北六星集足體養生會館市府會館",
+      "mrtStation": "Taipei City Hall Station (BL18 Exit 1 — 2 min walk)",
+      "priceTier": "$$",
+      "recommendedDuration": "60–90 mins",
+      "insiderTip": "Open daily from 09:00 AM until 01:00 AM! Walk over after dinner or night markets in Xinyi for a 60-minute foot reflexology session (~NT$1,460).",
+      "featured": true,
+      "tags": [
+        "Foot Massage",
+        "Taiwanese Reflexology",
+        "Spa",
+        "Wellness",
+        "Acupressure",
+        "Xinyi"
+      ]
+    },
+    {
+      "id": "taipei-knife-massage",
+      "name": "World Knife Massage Association — Ancient Art of Knife Therapy (Dao Liao)",
+      "chineseName": "中華世界刀療協會 (台北地下街 Y16 傳統刀療體驗)",
+      "macroCategory": "sights",
+      "subCategory": "Cultural & Universities",
+      "district": "Zhongzheng",
+      "city": "Taipei",
+      "lat": 25.0492,
+      "lng": 121.5142,
+      "overview": "Home to Taiwan’s famous 2,000-year-old Knife Therapy (刀療 Dao Liao) inside Taipei City Mall near Exit Y16. Certified practitioners use a pair of heavy, completely unsharpened steel cleavers to rhythmically tap over a protective cloth along your back, shoulders, and legs—sending deep low-frequency vibrations that release fascia knots.",
+      "googleMapsUrl": "https://maps.google.com/?q=World+Knife+Massage+Association+Taipei+City+Mall+中華世界刀療協會",
+      "mrtStation": "Taipei Main Station / Beimen Station (Underground Mall Exit Y16)",
+      "priceTier": "$",
+      "recommendedDuration": "20–40 mins",
+      "insiderTip": "Walk-ins welcome! The blades are completely blunt and tap over a thick yellow cloth. Try the 10-minute shoulder trial (NT$350) or a 30-minute full session (~NT$1,000).",
+      "featured": true,
+      "tags": [
+        "Knife Massage",
+        "Dao Liao",
+        "Traditional Therapy",
+        "Massage",
+        "Unique Experience"
+      ]
+    },
+    {
+      "id": "xin-chao-shrimp-fishing",
+      "name": "Quan Jia Le & Xin Chao Indoor Shrimp Fishing & Salt-Grill Hall",
+      "chineseName": "全佳樂釣蝦場 / 新潮釣蝦美食廣場 (台北釣泰國蝦體驗)",
+      "macroCategory": "sights",
+      "subCategory": "Cultural & Universities",
+      "district": "Zhongshan",
+      "city": "Taipei",
+      "lat": 25.0604,
+      "lng": 121.5318,
+      "overview": "Authentic Taiwanese indoor prawn fishing hangout in Zhongshan District! Rent a bamboo fishing rod by the hour (~NT$350–400 including bait), sit around a bubbling indoor pool catching giant freshwater blue-claw prawns (泰國蝦), and salt-grill your catch right on-site in the glowing tabletop ovens.",
+      "googleMapsUrl": "https://maps.google.com/?q=Quan+Jia+Le+Shrimp+Fishing+Zhongshan+Taipei+全佳樂釣蝦場",
+      "mrtStation": "Xingtian Temple Station (Orange Line O09 Exit 4 — 5 min walk)",
+      "priceTier": "$",
+      "recommendedDuration": "1–2 hrs",
+      "insiderTip": "Wait 3–4 seconds after the float sinks before pulling sideways to hook the prawn! Coating your fresh catch in coarse sea salt and roasting them for 8 minutes on-site is free.",
+      "featured": true,
+      "tags": [
+        "Shrimp Fishing",
+        "Local Nightlife",
+        "Indoor Prawn Fishing",
+        "Salt Grilled Shrimp",
+        "Taiwanese Culture"
       ]
     }
   ]
