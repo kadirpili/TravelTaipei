@@ -1401,7 +1401,7 @@ export default function App() {
                     </button>
                   </div>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     {filteredPlaces.map((place) => (
                       <PlaceCard
                         key={place.id}

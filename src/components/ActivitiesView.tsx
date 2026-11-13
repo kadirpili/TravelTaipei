@@ -11,12 +11,14 @@ import { getPlaceImageUrl } from '../utils/placeImages';
 import { EnrichedPlaceItem } from '../utils/placesLogic';
 import {
   Check,
+  ChevronRight,
   Clock,
   Copy,
   ExternalLink,
   MapPin,
   Navigation,
   Sparkles,
+  X,
 } from 'lucide-react';
 
 interface ActivitiesViewProps {
@@ -40,6 +42,9 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<ActivityCategory>('all');
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [detailActivity, setDetailActivity] = useState<TaiwanActivityItem | null>(
+    null
+  );
 
   const placeMap = useMemo(() => {
     const map = new Map<string, EnrichedPlaceItem>();
@@ -68,31 +73,24 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({
   };
 
   return (
-    <div className="space-y-3 sm:space-y-4">
-      {/* Header + Category Filter Pills */}
-      <div className="bg-white border border-slate-200/90 rounded-2xl p-3 sm:p-4 shadow-xs space-y-2.5">
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <span className="w-8 h-8 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center shrink-0 text-base">
-              💆
-            </span>
-            <div className="min-w-0">
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <h2 className="font-display text-sm sm:text-lg font-bold text-slate-900">
-                  {lang === 'ru'
-                    ? 'Тайваньские активности: массаж стоп, массаж ножами, чай и колорит'
-                    : 'Signature Taiwanese Activities: Foot Massage, Knife Therapy, Tea & Local Fun'}
-                </h2>
-                <span className="px-2 py-0.5 rounded-full bg-teal-100 text-teal-900 text-[10px] font-extrabold uppercase tracking-wide">
-                  {lang === 'ru' ? '12 лучших впечатлений' : '12 Iconic Experiences'}
-                </span>
-              </div>
-              <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5">
-                {lang === 'ru'
-                  ? 'Знаменитый рефлексомассаж стоп (6 Star), древний массаж тесаками Дао-Ляо (刀療), мытьё головы сидя с пенной башней, чайные церемонии Гунфу-Ча и ночная ловля креветок'
-                  : 'Traditional foot reflexology (6 Star), 2,000-year-old cleaver knife massage (刀療), seated bubble shampoo, Gongfu mountain tea drinking, and indoor shrimp fishing'}
-              </p>
-            </div>
+    <div className="space-y-2.5">
+      {/* Compact Header + Category Filter Pills */}
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-2.5 sm:p-3.5 shadow-xs space-y-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="w-7 h-7 rounded-lg bg-teal-100 text-teal-800 flex items-center justify-center shrink-0 text-sm">
+            💆
+          </span>
+          <div className="min-w-0">
+            <h2 className="font-display text-sm sm:text-base font-bold text-slate-900 truncate">
+              {lang === 'ru'
+                ? 'Тайваньские активности: массаж стоп, массаж ножами, чай и креветки'
+                : 'Taiwanese Activities: Foot Massage, Knife Therapy, Tea & Shrimp Fishing'}
+            </h2>
+            <p className="text-[11px] text-slate-500 truncate">
+              {lang === 'ru'
+                ? 'Нажмите на любую строку, чтобы открыть полное описание, как проходит ритуал и адреса'
+                : 'Tap any row to pop up step-by-step details, Chinese taxi phrase & map venues'}
+            </p>
           </div>
         </div>
 
@@ -100,7 +98,9 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({
         <div
           className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5"
           role="group"
-          aria-label={lang === 'ru' ? 'Категории активностей' : 'Activity categories'}
+          aria-label={
+            lang === 'ru' ? 'Категории активностей' : 'Activity categories'
+          }
         >
           {ACTIVITY_CATEGORIES.map((cat) => {
             const isActive = selectedCategory === cat.id;
@@ -115,7 +115,10 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({
                     cat.id,
                     externalSearchQuery
                   );
-                  if (next.length > 0 && !next.some((a) => a.id === activeActivityId)) {
+                  if (
+                    next.length > 0 &&
+                    !next.some((a) => a.id === activeActivityId)
+                  ) {
                     onSelectActivity(next[0]);
                   }
                 }}
@@ -134,7 +137,7 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({
         </div>
       </div>
 
-      {/* Activities Cards List */}
+      {/* Compact Scrollable Activity Rows */}
       {filteredActivities.length === 0 ? (
         <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center">
           <p className="text-sm font-semibold text-slate-800">
@@ -151,7 +154,7 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({
           </button>
         </div>
       ) : (
-        <div className="space-y-3.5">
+        <div className="space-y-2">
           {filteredActivities.map((act) => {
             const isSelected = act.id === activeActivityId;
             const primaryPlaceId = act.placeIds[0] || 'taipei-101';
@@ -159,243 +162,350 @@ export const ActivitiesView: React.FC<ActivitiesViewProps> = ({
             const title = lang === 'ru' ? act.titleRu : act.titleEn;
             const subtitle = lang === 'ru' ? act.subtitleRu : act.subtitleEn;
             const duration = lang === 'ru' ? act.durationRu : act.durationEn;
-            const bestTime = lang === 'ru' ? act.bestTimeRu : act.bestTimeEn;
-            const priceRange = lang === 'ru' ? act.priceRangeRu : act.priceRangeEn;
+            const priceRange =
+              lang === 'ru' ? act.priceRangeRu : act.priceRangeEn;
             const venueLabel = lang === 'ru' ? act.venueRu : act.venueEn;
-            const description = lang === 'ru' ? act.descriptionRu : act.descriptionEn;
-            const steps = lang === 'ru' ? act.stepByStepRu : act.stepByStepEn;
-            const proTip = lang === 'ru' ? act.proTipRu : act.proTipEn;
-
-            const mappedPlaces = act.placeIds
-              .map((pid) => placeMap.get(pid))
-              .filter((p): p is EnrichedPlaceItem => Boolean(p));
 
             return (
               <article
                 key={act.id}
-                onClick={() => onSelectActivity(act)}
-                className={`group rounded-2xl bg-white border transition-all duration-150 overflow-hidden cursor-pointer ${
+                onClick={() => {
+                  onSelectActivity(act);
+                  setDetailActivity(act);
+                }}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onSelectActivity(act);
+                    setDetailActivity(act);
+                  }
+                }}
+                className={`group rounded-2xl bg-white border transition-all duration-150 p-2.5 sm:p-3 flex items-center gap-3 cursor-pointer select-none ${
                   isSelected
-                    ? 'border-teal-700 ring-2 ring-teal-600/20 shadow-md'
-                    : 'border-slate-200/90 hover:border-slate-300 shadow-xs'
+                    ? 'border-teal-700 ring-2 ring-teal-600/20 bg-teal-50/20 shadow-sm'
+                    : 'border-slate-200/90 hover:border-teal-600/60 hover:bg-slate-50/60 shadow-2xs'
                 }`}
               >
-                {/* Hero Image Banner */}
-                <div className="relative h-44 sm:h-52 w-full bg-slate-900 overflow-hidden">
+                {/* Left Compact Thumbnail */}
+                <div className="relative w-20 h-20 rounded-xl overflow-hidden shrink-0 bg-slate-100 border border-slate-200/60">
                   <img
                     src={heroImg}
                     alt={title}
                     loading="lazy"
                     decoding="async"
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent" />
+                  {act.isSignature && (
+                    <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-amber-400 text-slate-950 text-[9px] font-extrabold shadow-xs">
+                      ⭐ {lang === 'ru' ? 'Хит' : 'Top'}
+                    </span>
+                  )}
+                  <span className="absolute bottom-1 left-1 px-1.5 py-0.2 rounded bg-slate-950/80 text-white text-[10px] font-bold">
+                    {duration}
+                  </span>
+                </div>
 
-                  {/* Top Badges */}
-                  <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between gap-1.5 flex-wrap">
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="px-2.5 py-0.5 rounded-full bg-teal-700/95 backdrop-blur-xs text-white text-[10px] sm:text-[11px] font-extrabold shadow-sm inline-flex items-center gap-1">
-                        <Clock className="w-3 h-3 shrink-0" />
-                        <span>{duration}</span>
-                      </span>
-                      {act.isSignature && (
-                        <span className="px-2 py-0.5 rounded-full bg-amber-400 text-slate-950 text-[10px] font-extrabold uppercase tracking-wide shadow-sm">
-                          {lang === 'ru' ? '⭐ Обязательно попробовать' : '⭐ Must-Try Experience'}
-                        </span>
-                      )}
-                    </div>
-                    <span className="px-2.5 py-0.5 rounded-full bg-slate-900/85 backdrop-blur-xs text-emerald-300 border border-white/15 text-[10px] sm:text-[11px] font-bold">
+                {/* Center Compact Info */}
+                <div className="flex-1 min-w-0 space-y-0.5">
+                  <div className="flex items-center justify-between gap-2 text-[11px]">
+                    <span className="font-semibold text-teal-800 truncate">
+                      {act.titleZh}
+                    </span>
+                    <span className="font-mono-num font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-1.5 py-0.2 rounded shrink-0 truncate max-w-[160px]">
                       {priceRange}
                     </span>
                   </div>
 
-                  {/* Bottom Title Overlay */}
-                  <div className="absolute bottom-2.5 left-3 right-3">
-                    <div className="text-[11px] font-semibold text-amber-300 truncate">
-                      {act.titleZh}
-                    </div>
-                    <h3 className="font-display text-sm sm:text-lg font-bold text-white leading-snug mt-0.5">
-                      {title}
-                    </h3>
-                    <p className="text-[11px] text-white/80 line-clamp-1 mt-0.5">
-                      {subtitle}
-                    </p>
-                  </div>
-                </div>
+                  <h3 className="font-display text-sm sm:text-base font-bold text-slate-900 group-hover:text-teal-800 transition-colors truncate">
+                    {title}
+                  </h3>
 
-                {/* Body Content */}
-                <div className="p-3 sm:p-4 space-y-3">
-                  {/* Best Time & Venue + Copy Chinese Button */}
-                  <div className="flex flex-wrap items-center justify-between gap-2 bg-slate-50 border border-slate-200/80 rounded-xl px-2.5 py-2 text-xs">
-                    <div className="space-y-0.5 min-w-0">
-                      <div className="flex items-center gap-1.5 text-slate-700 font-semibold">
-                        <Clock className="w-3.5 h-3.5 text-teal-700 shrink-0" />
-                        <span>{bestTime}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-slate-600">
-                        <MapPin className="w-3.5 h-3.5 text-amber-700 shrink-0" />
-                        <span className="truncate">{venueLabel}</span>
-                      </div>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleCopyPhrase(act.id, `${act.venueZh} (${act.titleZh})`);
-                      }}
-                      className="min-h-[32px] px-2.5 py-1 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-slate-800 text-[11px] font-semibold inline-flex items-center gap-1 shrink-0 transition-colors"
-                    >
-                      {copiedId === act.id ? (
-                        <>
-                          <Check className="w-3.5 h-3.5 text-emerald-600" />
-                          <span className="text-emerald-700">
-                            {lang === 'ru' ? 'Скопировано!' : 'Copied!'}
-                          </span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3.5 h-3.5 text-slate-500" />
-                          <span>
-                            {lang === 'ru' ? 'Скопировать для такси 中文' : 'Copy Address 中文'}
-                          </span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-
-                  {/* Description */}
-                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                    {description}
+                  <p className="text-xs text-slate-500 line-clamp-1 leading-relaxed">
+                    {subtitle}
                   </p>
 
-                  {/* Step-by-Step / What to Expect */}
-                  <div className="bg-teal-50/50 border border-teal-200/70 rounded-xl p-2.5 sm:p-3 space-y-1.5">
-                    <div className="text-[11px] font-bold uppercase tracking-wider text-teal-900">
-                      {lang === 'ru' ? 'Как проходит ритуал / Что внутри:' : 'How It Works / What to Expect:'}
-                    </div>
-                    <ul className="space-y-1.5">
-                      {steps.map((step, idx) => (
-                        <li
-                          key={idx}
-                          className="text-xs text-slate-800 flex items-start gap-2 leading-relaxed"
-                        >
-                          <span className="text-teal-700 font-bold shrink-0 mt-0.5">✦</span>
-                          <span>{step}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Insider Tip */}
-                  <div className="flex items-start gap-2 bg-amber-50/70 border border-amber-200/80 rounded-xl p-2.5 text-xs text-amber-950">
-                    <Sparkles className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
-                    <div>
-                      <span className="font-bold">
-                        {lang === 'ru' ? 'Совет инсайдера: ' : 'Insider Tip: '}
-                      </span>
-                      <span>{proTip}</span>
-                    </div>
-                  </div>
-
-                  {/* Mapped Venues on Interactive Map */}
-                  {mappedPlaces.length > 0 && (
-                    <div className="space-y-1.5 pt-1">
-                      <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                        {lang === 'ru'
-                          ? 'Лучшие проверенные точки на карте (нажмите, чтобы показать):'
-                          : 'Recommended Spots on Interactive Map (tap to locate):'}
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                        {mappedPlaces.map((place, idx) => {
-                          const pText = getLocalizedPlaceText(place, lang);
-                          return (
-                            <div
-                              key={place.id}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onSelectActivity(act);
-                                onSelectPlaceOnMap(place);
-                              }}
-                              className="flex items-center justify-between gap-2 p-2 rounded-xl bg-slate-50 hover:bg-teal-50/60 border border-slate-200/80 hover:border-teal-300 transition-colors"
-                            >
-                              <div className="flex items-center gap-2 min-w-0">
-                                <span className="w-5 h-5 rounded-full bg-teal-700 text-white text-[11px] font-bold flex items-center justify-center shrink-0">
-                                  {idx + 1}
-                                </span>
-                                <div className="min-w-0">
-                                  <div className="text-xs font-bold text-slate-900 truncate">
-                                    {pText.displayName}
-                                  </div>
-                                  <div className="text-[10px] text-slate-500 truncate">
-                                    {place.chineseName} · {place.distanceKm.toFixed(1)}{' '}
-                                    {lang === 'ru' ? 'км' : 'km'}
-                                  </div>
-                                </div>
-                              </div>
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  onOpenPlaceDetail(place);
-                                }}
-                                className="px-2 py-1 rounded-lg bg-white border border-slate-200 text-[10px] font-semibold text-slate-700 hover:text-slate-900 shrink-0"
-                              >
-                                {lang === 'ru' ? 'Инфо' : 'Info'}
-                              </button>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Bottom Action Links */}
-                  <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-100">
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onSelectActivity(act);
-                        if (mappedPlaces[0]) {
-                          onSelectPlaceOnMap(mappedPlaces[0]);
-                        }
-                      }}
-                      className="min-h-[34px] px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-colors"
-                    >
-                      <MapPin className="w-3.5 h-3.5 text-amber-400" />
-                      <span>
-                        {lang === 'ru' ? 'Показать на карте' : 'Highlight on Map'}
-                      </span>
-                    </button>
-
-                    <div className="flex items-center gap-1.5">
-                      <a
-                        href={act.googleMapsUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="min-h-[34px] px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold inline-flex items-center gap-1 transition-colors"
-                      >
-                        <Navigation className="w-3.5 h-3.5 text-teal-700" />
-                        <span>Google Maps</span>
-                      </a>
-                      <a
-                        href={act.bookingOrOfficialUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="min-h-[34px] px-2.5 py-1.5 rounded-xl bg-teal-50 hover:bg-teal-100 border border-teal-200 text-teal-900 text-xs font-semibold inline-flex items-center gap-1 transition-colors"
-                      >
-                        <span>{lang === 'ru' ? 'Сайт / Бронь' : 'Info / Book'}</span>
-                        <ExternalLink className="w-3 h-3" />
-                      </a>
-                    </div>
+                  <div className="flex items-center justify-between gap-2 pt-0.5 text-[11px] text-slate-500">
+                    <span className="truncate">📍 {venueLabel}</span>
+                    <span className="text-teal-700 font-semibold shrink-0">
+                      {lang === 'ru' ? 'Подробнее →' : 'Details →'}
+                    </span>
                   </div>
                 </div>
+
+                <ChevronRight
+                  className="w-4 h-4 text-slate-400 group-hover:text-teal-700 group-hover:translate-x-0.5 transition-all shrink-0"
+                  aria-hidden="true"
+                />
               </article>
             );
           })}
+        </div>
+      )}
+
+      {/* Pop-Up Activity Detail Modal */}
+      {detailActivity && (
+        <div
+          className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label={
+            lang === 'ru' ? detailActivity.titleRu : detailActivity.titleEn
+          }
+          onClick={() => setDetailActivity(null)}
+        >
+          <div
+            className="bg-[#F8F7F4] text-slate-900 rounded-t-3xl sm:rounded-3xl max-w-xl w-full max-h-[88vh] shadow-2xl border border-slate-200 flex flex-col overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Hero Image Header */}
+            <div className="relative h-48 sm:h-56 w-full shrink-0 bg-slate-900 overflow-hidden">
+              <img
+                src={getPlaceImageUrl(detailActivity.placeIds[0] || 'taipei-101')}
+                alt={
+                  lang === 'ru'
+                    ? detailActivity.titleRu
+                    : detailActivity.titleEn
+                }
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent" />
+
+              <button
+                type="button"
+                onClick={() => setDetailActivity(null)}
+                aria-label={lang === 'ru' ? 'Закрыть' : 'Close'}
+                className="absolute top-3.5 right-3.5 min-h-[40px] min-w-[40px] rounded-full bg-slate-900/75 hover:bg-slate-900 text-white flex items-center justify-center border border-white/20"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="absolute bottom-3.5 left-5 right-5 text-white">
+                <div className="flex flex-wrap items-center gap-1.5 text-xs">
+                  <span className="px-2 py-0.5 rounded-md bg-teal-600 text-white font-extrabold inline-flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    <span>
+                      {lang === 'ru'
+                        ? detailActivity.durationRu
+                        : detailActivity.durationEn}
+                    </span>
+                  </span>
+                  <span className="px-2 py-0.5 rounded-md bg-emerald-500/25 border border-emerald-400/30 text-emerald-200 font-mono-num font-bold">
+                    {lang === 'ru'
+                      ? detailActivity.priceRangeRu
+                      : detailActivity.priceRangeEn}
+                  </span>
+                </div>
+                <h3 className="text-lg sm:text-xl font-bold text-white mt-1 leading-snug">
+                  {lang === 'ru'
+                    ? detailActivity.titleRu
+                    : detailActivity.titleEn}
+                </h3>
+                <p className="text-xs text-amber-300 font-semibold mt-0.5">
+                  {detailActivity.titleZh}
+                </p>
+              </div>
+            </div>
+
+            {/* Scrollable Body */}
+            <div className="p-4 sm:p-5 overflow-y-auto space-y-4">
+              {/* Time & Venue + Copy Chinese Taxi Card */}
+              <div className="bg-slate-900 text-white rounded-2xl p-4 space-y-2">
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-amber-300">
+                    {lang === 'ru'
+                      ? 'Адрес и название для такси / персонала:'
+                      : 'Show to Taxi Driver / Staff:'}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleCopyPhrase(
+                        detailActivity.id,
+                        `${detailActivity.venueZh} (${detailActivity.titleZh})`
+                      )
+                    }
+                    className="min-h-[32px] px-3 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold inline-flex items-center gap-1.5 transition-colors shrink-0"
+                  >
+                    {copiedId === detailActivity.id ? (
+                      <>
+                        <Check className="w-3.5 h-3.5" />
+                        <span>{lang === 'ru' ? 'Скопировано!' : 'Copied!'}</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span>
+                          {lang === 'ru' ? 'Скопировать 中文' : 'Copy 中文'}
+                        </span>
+                      </>
+                    )}
+                  </button>
+                </div>
+                <div className="text-base sm:text-lg font-extrabold text-white leading-snug">
+                  {detailActivity.venueZh}
+                </div>
+                <div className="text-xs text-slate-300 space-y-0.5">
+                  <div>
+                    📍{' '}
+                    {lang === 'ru'
+                      ? detailActivity.venueRu
+                      : detailActivity.venueEn}
+                  </div>
+                  <div>
+                    🕒{' '}
+                    {lang === 'ru'
+                      ? detailActivity.bestTimeRu
+                      : detailActivity.bestTimeEn}
+                  </div>
+                </div>
+              </div>
+
+              {/* Description & Step-by-Step Guide */}
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-4 space-y-3">
+                <p className="text-sm text-slate-800 leading-relaxed">
+                  {lang === 'ru'
+                    ? detailActivity.descriptionRu
+                    : detailActivity.descriptionEn}
+                </p>
+
+                <div className="bg-teal-50/70 border border-teal-200/80 rounded-xl p-3 space-y-1.5">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-teal-900">
+                    {lang === 'ru'
+                      ? 'Как проходит ритуал / Что внутри:'
+                      : 'Step-by-Step / What to Expect:'}
+                  </div>
+                  <ul className="space-y-1.5">
+                    {(lang === 'ru'
+                      ? detailActivity.stepByStepRu
+                      : detailActivity.stepByStepEn
+                    ).map((step, idx) => (
+                      <li
+                        key={idx}
+                        className="text-xs text-slate-800 flex items-start gap-2 leading-relaxed"
+                      >
+                        <span className="text-teal-700 font-bold shrink-0">
+                          ✦
+                        </span>
+                        <span>{step}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="bg-amber-50/80 border border-amber-200/80 rounded-xl p-3 text-xs text-amber-950 flex items-start gap-2">
+                  <Sparkles className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold">
+                      {lang === 'ru' ? 'Совет инсайдера: ' : 'Insider Tip: '}
+                    </span>
+                    <span>
+                      {lang === 'ru'
+                        ? detailActivity.proTipRu
+                        : detailActivity.proTipEn}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Mapped Venues */}
+              <div className="space-y-2">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                  {lang === 'ru'
+                    ? 'Рекомендуемые точки на карте:'
+                    : 'Recommended Venues on Map:'}
+                </h4>
+                <div className="divide-y divide-slate-200/70 bg-white border border-slate-200/90 rounded-2xl overflow-hidden">
+                  {detailActivity.placeIds
+                    .map((pid) => placeMap.get(pid))
+                    .filter((p): p is EnrichedPlaceItem => Boolean(p))
+                    .map((place, idx) => {
+                      const pText = getLocalizedPlaceText(place, lang);
+                      return (
+                        <div
+                          key={place.id}
+                          className="p-3 flex items-center justify-between gap-2 hover:bg-slate-50 transition-colors"
+                        >
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onSelectActivity(detailActivity);
+                              onSelectPlaceOnMap(place);
+                              setDetailActivity(null);
+                            }}
+                            className="text-left flex-1 min-w-0 flex items-center gap-2.5"
+                          >
+                            <span className="w-5 h-5 rounded-full bg-teal-700 text-white text-[11px] font-bold flex items-center justify-center shrink-0">
+                              {idx + 1}
+                            </span>
+                            <div className="min-w-0">
+                              <div className="text-xs sm:text-sm font-bold text-slate-900 truncate">
+                                {pText.displayName} ({place.chineseName})
+                              </div>
+                              <div className="text-[11px] text-slate-500 truncate">
+                                {pText.districtLabel} ·{' '}
+                                {place.distanceKm.toFixed(1)}{' '}
+                                {lang === 'ru' ? 'км' : 'km'} ·{' '}
+                                {place.travelEstimate}
+                              </div>
+                            </div>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setDetailActivity(null);
+                              onOpenPlaceDetail(place);
+                            }}
+                            className="min-h-[34px] px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold shrink-0"
+                          >
+                            {lang === 'ru' ? 'О месте' : 'Place Info'}
+                          </button>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+            </div>
+
+            {/* Sticky Footer */}
+            <div className="bg-white border-t border-slate-200 px-4 sm:px-5 py-3 flex items-center justify-between gap-2 flex-wrap">
+              <button
+                type="button"
+                onClick={() => {
+                  onSelectActivity(detailActivity);
+                  setDetailActivity(null);
+                }}
+                className="min-h-[40px] px-3.5 py-2 rounded-xl bg-teal-800 hover:bg-teal-900 text-white text-xs font-bold inline-flex items-center gap-1.5 transition-colors"
+              >
+                <MapPin className="w-3.5 h-3.5" />
+                <span>
+                  {lang === 'ru' ? 'Показать на карте' : 'Show on Map'}
+                </span>
+              </button>
+
+              <div className="flex items-center gap-1.5">
+                <a
+                  href={detailActivity.googleMapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="min-h-[40px] px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold inline-flex items-center gap-1 transition-colors"
+                >
+                  <Navigation className="w-3.5 h-3.5 text-teal-700" />
+                  <span>Google Maps</span>
+                </a>
+                <a
+                  href={detailActivity.bookingOrOfficialUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="min-h-[40px] px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-colors"
+                >
+                  <span>{lang === 'ru' ? 'Сайт / Бронь' : 'Info / Book'}</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
