@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="112" fill="#0F172A" />
+  <!-- Mountain backdrop representing Yangmingshan & Elephant Mountain -->
+  <path d="M64 384 L176 232 L268 332 L356 204 L448 384 Z" fill="#0F766E" opacity="0.85" />
+  <!-- Stylized Taipei 101 spire & tiers -->
+  <rect x="248" y="88" width="16" height="48" rx="4" fill="#F59E0B" />
+  <polygon points="224,136 288,136 278,184 234,184" fill="#F8FAFC" />
+  <polygon points="220,188 292,188 280,236 232,236" fill="#F8FAFC" />
+  <polygon points="216,240 296,240 282,288 230,288" fill="#F8FAFC" />
+  <polygon points="212,292 300,292 286,384 226,384" fill="#F8FAFC" />
+  <!-- Wayfinder compass ring -->
+  <circle cx="256" cy="160" r="10" fill="#C2410C" />
+  <!-- Base horizon line -->
+  <rect x="96" y="384" width="320" height="20" rx="10" fill="#C2410C" />
+</svg>
