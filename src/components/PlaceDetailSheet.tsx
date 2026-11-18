@@ -49,6 +49,15 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
   const [copied, setCopied] = useState(false);
   const [copiedName, setCopiedName] = useState(false);
 
+  React.useEffect(() => {
+    if (!place || typeof document === 'undefined') return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [place]);
+
   if (!place) return null;
 
   const t = UI_STRINGS[lang];
@@ -94,11 +103,12 @@ export const PlaceDetailSheet: React.FC<PlaceDetailSheetProps> = ({
       onClick={onClose}
     >
       <div
-        className="w-full sm:max-w-xl max-h-[88vh] bg-[#F8F7F4] rounded-t-3xl sm:rounded-3xl border border-slate-200 shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+        className="w-full sm:max-w-xl max-h-[90dvh] bg-[#F8F7F4] rounded-t-3xl sm:rounded-3xl border border-slate-200 shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Hero Image Header with Dark Scrim & Close Button */}
-        <div className="relative h-52 sm:h-64 w-full shrink-0 bg-slate-900 overflow-hidden">
+        <div className="relative h-48 sm:h-64 w-full shrink-0 bg-slate-900 overflow-hidden">
+          <div className="sm:hidden absolute top-2 left-1/2 -translate-x-1/2 w-10 h-1.5 rounded-full bg-white/75 z-10 pointer-events-none" />
           <img
             src={heroImageUrl}
             alt={loc.displayName}

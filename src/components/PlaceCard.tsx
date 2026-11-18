@@ -5,7 +5,6 @@ import { EnrichedPlaceItem, SortMode } from '../utils/placesLogic';
 import {
   Bookmark,
   ChevronRight,
-  MapPin,
 } from 'lucide-react';
 
 interface PlaceCardProps {
@@ -54,14 +53,14 @@ export const PlaceCard: React.FC<PlaceCardProps> = ({
         }
       }}
       aria-label={`${loc.displayName} (${place.chineseName})`}
-      className={`group rounded-2xl bg-white border transition-all duration-150 p-2.5 sm:p-3 flex items-center gap-3 cursor-pointer select-none ${
+      className={`group rounded-2xl bg-white border transition-all duration-150 p-2.5 sm:p-3 flex items-center gap-2.5 sm:gap-3 cursor-pointer select-none active:scale-[0.99] ${
         isSelected
-          ? 'border-amber-600 ring-2 ring-amber-500/20 bg-amber-50/20 shadow-sm'
+          ? 'border-amber-600 ring-2 ring-amber-500/20 bg-amber-50/25 shadow-sm'
           : 'border-slate-200/90 hover:border-amber-500/60 hover:bg-slate-50/60 shadow-2xs'
       }`}
     >
-      {/* Left Compact Thumbnail Photo */}
-      <div className="relative w-20 h-20 sm:w-22 sm:h-22 rounded-xl overflow-hidden shrink-0 bg-slate-100 border border-slate-200/70">
+      {/* Left Compact Thumbnail Photo (68px on mobile, 84px on desktop) */}
+      <div className="relative w-[68px] h-[68px] sm:w-[84px] sm:h-[84px] rounded-xl overflow-hidden shrink-0 bg-slate-100 border border-slate-200/70">
         <img
           src={imageUrl}
           alt={loc.displayName}
@@ -72,86 +71,68 @@ export const PlaceCard: React.FC<PlaceCardProps> = ({
 
         {/* Rank or Stop Badge on Thumbnail */}
         {sortBy === 'nearest' && place.distanceRank !== undefined ? (
-          <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-emerald-900/90 text-amber-300 font-mono-num text-[10px] font-extrabold shadow-xs">
+          <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-emerald-900/90 text-amber-300 font-mono-num text-[10px] font-extrabold shadow-xs">
             #{place.distanceRank}
           </span>
         ) : stopIndex !== undefined ? (
-          <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-amber-700 text-white font-mono-num text-[10px] font-extrabold shadow-xs">
+          <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-amber-700 text-white font-mono-num text-[10px] font-extrabold shadow-xs">
             0{stopIndex}
           </span>
         ) : null}
 
         {/* Price Tier Pill on Bottom-Left of Thumbnail */}
         {place.priceTier && (
-          <span className="absolute bottom-1 left-1 px-1.5 py-0.2 rounded bg-slate-950/80 text-white font-mono-num text-[10px] font-bold">
+          <span className="absolute bottom-1 left-1 px-1.5 py-0.2 rounded bg-slate-950/80 text-white font-mono-num text-[9px] sm:text-[10px] font-bold">
             {place.priceTier === 'Free' ? t.freePrice : place.priceTier}
           </span>
         )}
       </div>
 
-      {/* Center Compact Info Column */}
+      {/* Center Mobile-Optimized Info Column */}
       <div className="flex-1 min-w-0 space-y-0.5">
-        {/* Micro Metadata Line: Category · District · Distance */}
-        <div className="flex items-center justify-between gap-2 text-[11px] text-slate-500">
+        {/* Line 1: Subcategory · District + Distance Badge */}
+        <div className="flex items-center justify-between gap-1.5 text-[11px] text-slate-500">
           <span className="font-semibold text-amber-800 truncate">
             {loc.subCategoryLabel} · {loc.districtLabel}
           </span>
           <span
-            className={`font-mono-num font-bold shrink-0 px-1.5 py-0.2 rounded ${
+            className={`font-mono-num font-bold shrink-0 px-1.5 py-0.2 rounded text-[11px] ${
               sortBy === 'nearest'
                 ? 'bg-emerald-50 text-emerald-800 border border-emerald-200/80'
-                : 'text-slate-600'
+                : 'text-slate-700 bg-slate-100'
             }`}
           >
             {place.distanceKm} {lang === 'ru' ? 'км' : 'km'}
           </span>
         </div>
 
-        {/* Title & Chinese Name */}
-        <div className="flex items-baseline gap-1.5 min-w-0">
-          <h3 className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-amber-800 transition-colors truncate">
-            {loc.displayName}
-          </h3>
-          <span className="text-xs font-semibold text-slate-500 shrink-0">
+        {/* Line 2: Full Readable Title (up to 2 lines on mobile) */}
+        <h3 className="text-[13px] sm:text-base font-bold text-slate-900 group-hover:text-amber-800 transition-colors leading-snug line-clamp-2 sm:line-clamp-1">
+          {loc.displayName}
+        </h3>
+
+        {/* Line 3: Chinese Name + MRT + Travel Time */}
+        <div className="flex items-center gap-1.5 text-[11px] text-slate-500 truncate">
+          <span className="font-semibold text-slate-700 shrink-0">
             {place.chineseName}
           </span>
-        </div>
-
-        {/* Single-line Clamped Preview */}
-        <p className="text-xs text-slate-500 line-clamp-1 leading-relaxed">
-          {loc.overview}
-        </p>
-
-        {/* Bottom Micro-Row: MRT + Travel Time + Tap Hint */}
-        <div className="flex items-center justify-between gap-2 pt-0.5 text-[11px] text-slate-500">
+          <span aria-hidden="true">·</span>
           <span className="truncate">
             🚇 {loc.mrtStation} · {place.travelEstimate}
           </span>
-          <span className="text-amber-700 font-semibold shrink-0 hidden sm:inline">
-            {lang === 'ru' ? 'Подробнее →' : 'Details →'}
-          </span>
         </div>
+
+        {/* Line 4: 1-line summary on tablet/desktop, or concise tags on mobile */}
+        <p className="text-[11px] sm:text-xs text-slate-500 line-clamp-1 leading-relaxed">
+          {loc.overview}
+        </p>
       </div>
 
-      {/* Right Quick Actions (Pin on Map & Save Bookmark) */}
+      {/* Right Compact Save & Chevron */}
       <div
         className="flex items-center gap-1 shrink-0"
         onClick={(e) => e.stopPropagation()}
       >
-        <button
-          type="button"
-          onClick={() => onSelectOnMap(place)}
-          title={lang === 'ru' ? 'Показать на карте' : 'Highlight on Map'}
-          aria-label={`Pin ${place.name} on map`}
-          className={`w-9 h-9 rounded-xl border flex items-center justify-center transition-colors ${
-            isSelected
-              ? 'bg-amber-100 border-amber-400 text-amber-900'
-              : 'bg-slate-50 hover:bg-slate-100 border-slate-200/80 text-slate-600'
-          }`}
-        >
-          <MapPin className="w-4 h-4 text-amber-700" />
-        </button>
-
         <button
           type="button"
           onClick={() => onToggleSave(place.id)}
@@ -161,17 +142,17 @@ export const PlaceCard: React.FC<PlaceCardProps> = ({
               ? `Remove ${place.name} from saved list`
               : `Save ${place.name} to list`
           }
-          className={`w-9 h-9 rounded-xl border flex items-center justify-center transition-colors ${
+          className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl border flex items-center justify-center transition-colors ${
             isSaved
               ? 'bg-amber-700 border-amber-700 text-white'
-              : 'bg-slate-50 hover:bg-slate-100 border-slate-200/80 text-slate-600'
+              : 'bg-slate-50 hover:bg-slate-100 border-slate-200/80 text-slate-500'
           }`}
         >
-          <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
+          <Bookmark className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isSaved ? 'fill-current' : ''}`} />
         </button>
 
         <ChevronRight
-          className="w-4 h-4 text-slate-400 group-hover:text-amber-700 group-hover:translate-x-0.5 transition-all ml-0.5"
+          className="w-4 h-4 text-slate-400 group-hover:text-amber-700 transition-colors"
           aria-hidden="true"
         />
       </div>

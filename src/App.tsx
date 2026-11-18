@@ -746,15 +746,54 @@ export default function App() {
         </div>
       </header>
 
+      {/* Mobile Horizontal Thumb-Scrollable Tab Bar (Visible on phones < md so all 9 tabs are 1 tap away) */}
+      <div
+        className="md:hidden sticky top-12 z-20 bg-white/95 backdrop-blur-md border-b border-slate-200 px-2.5 py-1.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar"
+        role="tablist"
+        aria-label={lang === 'ru' ? 'Разделы путеводителя' : 'Guide Sections'}
+      >
+        {(
+          [
+            { id: 'all', label: t.navAll },
+            { id: 'events', label: t.navEvents },
+            { id: 'activities', label: t.navActivities },
+            { id: 'snacks', label: t.navSnacks },
+            { id: 'dining', label: t.navDining },
+            { id: 'sights', label: t.navSights },
+            { id: 'tea_nightlife', label: t.navTeaBars },
+            { id: 'tours', label: t.navTours },
+            { id: 'itineraries', label: t.navItineraries },
+          ] as Array<{ id: ActiveTab; label: string }>
+        ).map((tab) => {
+          const isCurrent = activeTab === tab.id && !(tab.id === 'all' && savedOnly);
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              role="tab"
+              aria-selected={isCurrent}
+              onClick={() => handleTabChange(tab.id)}
+              className={`min-h-[32px] px-3 py-1 rounded-full text-xs font-bold transition-colors whitespace-nowrap shrink-0 border ${
+                isCurrent
+                  ? 'bg-slate-900 border-slate-900 text-white shadow-2xs'
+                  : 'bg-slate-100/90 border-slate-200/80 text-slate-700 active:bg-slate-200'
+              }`}
+            >
+              {tab.label}
+            </button>
+          );
+        })}
+      </div>
+
       {/* Main Responsive Split Workspace */}
-      <main className="flex-1 max-w-[1600px] w-full mx-auto px-2.5 sm:px-6 lg:px-8 pt-1.5 sm:pt-3 pb-6">
-        {/* Mobile-First Ultra-Compact Toolbar (Strictly 2 rows on 390px phones, 1 row on desktop) */}
+      <main className="flex-1 max-w-[1600px] w-full mx-auto px-2 sm:px-6 lg:px-8 pt-1.5 sm:pt-3 pb-20 lg:pb-6">
+        {/* Mobile-First Ultra-Compact Toolbar */}
         <section
           aria-label="Search, Quick Filters, and Language Controls"
-          className="bg-white border border-slate-200/90 rounded-xl px-2 py-1.5 sm:px-2.5 sm:py-2 shadow-xs mb-2"
+          className="bg-white border border-slate-200/90 rounded-2xl px-2.5 py-2 shadow-xs mb-2"
         >
           <div className="flex flex-wrap lg:flex-nowrap items-center gap-1.5 sm:gap-2">
-            {/* Row 1 on mobile: Compact Search Input + Split/List/Map Switcher */}
+            {/* Row 1 on mobile: Compact Search Input + Split/List/Map Switcher + Mobile Filter Toggle */}
             <div className="flex items-center gap-1.5 w-full lg:w-auto lg:flex-1 order-1">
               <div className="relative flex-1 min-w-0">
                 <label htmlFor="place-search-input" className="sr-only">
@@ -772,7 +811,7 @@ export default function App() {
                     }
                   }}
                   placeholder={t.searchPlaceholder(placesSource.length)}
-                  className="w-full min-h-[34px] sm:min-h-[38px] pl-7 pr-7 py-1 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-amber-700 focus:bg-white transition-colors [&::-webkit-search-cancel-button]:hidden"
+                  className="w-full min-h-[36px] sm:min-h-[38px] pl-7 pr-7 py-1 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-amber-700 focus:bg-white transition-colors [&::-webkit-search-cancel-button]:hidden"
                 />
                 {searchQuery && (
                   <button
@@ -795,7 +834,7 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => setMobileLayout('split')}
-                  className={`min-h-[30px] px-1.5 sm:px-2 py-0.5 rounded-lg text-[11px] font-semibold transition-colors whitespace-nowrap ${
+                  className={`min-h-[32px] px-2 py-0.5 rounded-lg text-[11px] font-bold transition-colors whitespace-nowrap ${
                     mobileLayout === 'split'
                       ? 'bg-white text-slate-900 shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
@@ -806,7 +845,7 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => setMobileLayout('list')}
-                  className={`min-h-[30px] px-1.5 sm:px-2 py-0.5 rounded-lg text-[11px] font-semibold transition-colors whitespace-nowrap ${
+                  className={`min-h-[32px] px-2 py-0.5 rounded-lg text-[11px] font-bold transition-colors whitespace-nowrap ${
                     mobileLayout === 'list'
                       ? 'bg-white text-slate-900 shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
@@ -817,7 +856,7 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => setMobileLayout('map')}
-                  className={`min-h-[30px] px-1.5 sm:px-2 py-0.5 rounded-lg text-[11px] font-semibold transition-colors whitespace-nowrap ${
+                  className={`min-h-[32px] px-2 py-0.5 rounded-lg text-[11px] font-bold transition-colors whitespace-nowrap ${
                     mobileLayout === 'map'
                       ? 'bg-white text-slate-900 shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
@@ -826,315 +865,336 @@ export default function App() {
                   {t.layoutMap}
                 </button>
               </div>
+
+              {/* Mobile Filter Drawer Toggle Button */}
+              <button
+                type="button"
+                onClick={() => setShowMobileAdvancedFilters((prev) => !prev)}
+                aria-expanded={showMobileAdvancedFilters}
+                aria-label={lang === 'ru' ? 'Фильтры и районы' : 'Filters & Districts'}
+                className={`sm:hidden min-h-[36px] px-2.5 rounded-xl border text-xs font-bold inline-flex items-center justify-center gap-1 shrink-0 transition-colors ${
+                  showMobileAdvancedFilters || hasActiveFilters
+                    ? 'bg-amber-100 border-amber-400 text-amber-950'
+                    : 'bg-slate-50 border-slate-200 text-slate-700'
+                }`}
+              >
+                <SlidersHorizontal className="w-3.5 h-3.5" />
+              </button>
             </div>
 
-            {/* 2. Category / View Dropdown (Row 2 on mobile) */}
-            <div className="flex items-center bg-slate-50 border border-slate-200 rounded-xl px-1.5 sm:px-2 min-h-[34px] sm:min-h-[38px] flex-1 min-w-0 sm:w-auto lg:max-w-[225px] order-2">
-              <label htmlFor="category-filter-select" className="sr-only">
-                {lang === 'ru' ? 'Категория или раздел' : 'Category or view'}
-              </label>
-              <select
-                id="category-filter-select"
-                aria-label={lang === 'ru' ? 'Категория' : 'Category'}
-                value={
-                  activeTab === 'events'
-                    ? 'tab:events'
-                    : activeTab === 'activities'
-                      ? 'tab:activities'
-                      : activeTab === 'snacks'
-                        ? 'tab:snacks'
-                        : activeTab === 'tours'
-                          ? 'tab:tours'
-                          : activeTab === 'itineraries'
-                            ? 'tab:itineraries'
-                            : personalHubsOnly
-                              ? 'preset:myhubs'
-                              : savedOnly
-                                ? 'preset:saved'
-                                : subCategory !== 'all'
-                                  ? `sub:${subCategory}`
-                                  : activeTab !== 'all'
-                                    ? `tab:${activeTab}`
-                                    : 'all'
-                }
-                onChange={(e) => {
-                  const val = e.target.value;
-                  setSavedOnly(false);
-                  setPersonalHubsOnly(false);
+            {/* Secondary Filter Dropdowns (Collapsible on mobile phones, always visible on sm+) */}
+            <div
+              className={`${
+                showMobileAdvancedFilters ? 'grid grid-cols-1 gap-1.5 w-full pt-1' : 'hidden'
+              } sm:flex sm:flex-wrap lg:flex-nowrap items-center gap-1.5 sm:gap-2 w-full lg:w-auto order-2`}
+            >
+              {/* 2. Category / Cuisine Dropdown */}
+              <div className="flex items-center bg-slate-50 border border-slate-200 rounded-xl px-2 min-h-[36px] sm:min-h-[38px] flex-1 min-w-0 sm:w-auto lg:max-w-[225px]">
+                <label htmlFor="category-filter-select" className="sr-only">
+                  {lang === 'ru' ? 'Категория или раздел' : 'Category or view'}
+                </label>
+                <select
+                  id="category-filter-select"
+                  aria-label={lang === 'ru' ? 'Категория' : 'Category'}
+                  value={
+                    activeTab === 'events'
+                      ? 'tab:events'
+                      : activeTab === 'activities'
+                        ? 'tab:activities'
+                        : activeTab === 'snacks'
+                          ? 'tab:snacks'
+                          : activeTab === 'tours'
+                            ? 'tab:tours'
+                            : activeTab === 'itineraries'
+                              ? 'tab:itineraries'
+                              : personalHubsOnly
+                                ? 'preset:myhubs'
+                                : savedOnly
+                                  ? 'preset:saved'
+                                  : subCategory !== 'all'
+                                    ? `sub:${subCategory}`
+                                    : activeTab !== 'all'
+                                      ? `tab:${activeTab}`
+                                      : 'all'
+                  }
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setSavedOnly(false);
+                    setPersonalHubsOnly(false);
 
-                  if (val === 'all') {
-                    setActiveTab('all');
-                    setSubCategory('all');
-                  } else if (val === 'preset:myhubs') {
-                    setActiveTab('all');
-                    setSubCategory('all');
-                    setPersonalHubsOnly(true);
-                  } else if (val === 'preset:saved') {
-                    setActiveTab('all');
-                    setSubCategory('all');
-                    setSavedOnly(true);
-                  } else if (val.startsWith('tab:')) {
-                    const nextTab = val.replace('tab:', '') as ActiveTab;
-                    setActiveTab(nextTab);
-                    setSubCategory('all');
-                  } else if (val.startsWith('sub:')) {
-                    const nextSub = val.replace('sub:', '') as SubCategory;
+                    if (val === 'all') {
+                      setActiveTab('all');
+                      setSubCategory('all');
+                    } else if (val === 'preset:myhubs') {
+                      setActiveTab('all');
+                      setSubCategory('all');
+                      setPersonalHubsOnly(true);
+                    } else if (val === 'preset:saved') {
+                      setActiveTab('all');
+                      setSubCategory('all');
+                      setSavedOnly(true);
+                    } else if (val.startsWith('tab:')) {
+                      const nextTab = val.replace('tab:', '') as ActiveTab;
+                      setActiveTab(nextTab);
+                      setSubCategory('all');
+                    } else if (val.startsWith('sub:')) {
+                      const nextSub = val.replace('sub:', '') as SubCategory;
+                      if (
+                        activeTab === 'tours' ||
+                        activeTab === 'itineraries' ||
+                        activeTab === 'snacks' ||
+                        activeTab === 'events' ||
+                        activeTab === 'activities'
+                      ) {
+                        setActiveTab('all');
+                      }
+                      setSubCategory(nextSub);
+                    }
+                  }}
+                  className="bg-transparent text-xs font-semibold text-slate-900 focus:outline-none py-1 cursor-pointer truncate w-full"
+                >
+                  <optgroup
+                    label={
+                      lang === 'ru'
+                        ? 'Разделы и подборки'
+                        : 'Views & Quick Lists'
+                    }
+                  >
+                    <option value="all">
+                      {lang === 'ru'
+                        ? `🌏 Все места (${placesSource.length})`
+                        : `🌏 All Places (${placesSource.length})`}
+                    </option>
+                    <option value="tab:events">
+                      {lang === 'ru'
+                        ? `🎉 События 22 дек – 7 янв (${FESTIVE_EVENTS.length})`
+                        : `🎉 Events Dec 22 – Jan 7 (${FESTIVE_EVENTS.length})`}
+                    </option>
+                    <option value="tab:activities">
+                      {lang === 'ru'
+                        ? `💆 Активности: массаж, чай, креветки (${TAIWAN_ACTIVITIES.length})`
+                        : `💆 Activities: Massage, Tea & Local Fun (${TAIWAN_ACTIVITIES.length})`}
+                    </option>
+                    <option value="tab:snacks">
+                      {lang === 'ru'
+                        ? `🧋 Что попробовать: Снэки и Боба (${MUST_TRY_SNACKS.length})`
+                        : `🧋 Must-Try Snacks & Boba (${MUST_TRY_SNACKS.length})`}
+                    </option>
+                    <option value="tab:tours">
+                      {lang === 'ru'
+                        ? `🎟️ Туры Klook (${BOOKABLE_TOURS.length})`
+                        : `🎟️ Klook Tours (${BOOKABLE_TOURS.length})`}
+                    </option>
+                    <option value="preset:myhubs">
+                      {lang === 'ru'
+                        ? '🏠 Дом, Brownies и Офис TPKD'
+                        : '🏠 Home, Brownies & TPKD Office'}
+                    </option>
+                    <option value="preset:saved">
+                      {lang === 'ru'
+                        ? `⭐ Избранное (${savedIds.length})`
+                        : `⭐ Saved (${savedIds.length})`}
+                    </option>
+                    <option value="tab:sights">
+                      {lang === 'ru' ? '🏞️ Прогулки и парки' : '🏞️ Sights & Parks'}
+                    </option>
+                    <option value="tab:dining">
+                      {lang === 'ru' ? '🍜 Рестораны и еда' : '🍜 Dining & Food'}
+                    </option>
+                    <option value="tab:tea_nightlife">
+                      {lang === 'ru' ? '🍵 Чай, кофе и десерты' : '🍵 Tea & Cafes'}
+                    </option>
+                    <option value="tab:itineraries">
+                      {lang === 'ru' ? '🗺️ Маршруты по дням' : '🗺️ Day Itineraries'}
+                    </option>
+                  </optgroup>
+                  <optgroup
+                    label={
+                      lang === 'ru'
+                        ? 'Категории и кухня'
+                        : 'Categories & Cuisine'
+                    }
+                  >
+                    {getAvailableSubCategories(placesSource, 'all').map((item) => (
+                      <option
+                        key={item.subCategory}
+                        value={`sub:${item.subCategory}`}
+                      >
+                        {getLocalizedSubCategory(item.subCategory, lang)} ({item.count})
+                      </option>
+                    ))}
+                  </optgroup>
+                </select>
+              </div>
+
+              {/* 3. District Dropdown */}
+              {activeTab !== 'itineraries' &&
+                activeTab !== 'tours' &&
+                activeTab !== 'snacks' &&
+                activeTab !== 'events' &&
+                activeTab !== 'activities' && (
+                  <div className="flex items-center bg-slate-50 border border-slate-200 rounded-xl px-2 min-h-[36px] sm:min-h-[38px] flex-1 min-w-0 sm:w-auto lg:max-w-[185px]">
+                    <label htmlFor="district-filter-select" className="sr-only">
+                      {t.districtLabel}
+                    </label>
+                    <select
+                      id="district-filter-select"
+                      aria-label={lang === 'ru' ? 'Район' : 'District'}
+                      value={district}
+                      onChange={(e) => setDistrict(e.target.value)}
+                      className="bg-transparent text-xs font-semibold text-slate-900 focus:outline-none py-1 cursor-pointer truncate w-full"
+                    >
+                      <option value="all">
+                        📍 {t.allAreasBtn} ({placesSource.length})
+                      </option>
+                      {availableDistricts.map((d) => (
+                        <option key={d.district} value={d.district}>
+                          {getLocalizedDistrict(d.district, lang)} ({d.count})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+              {/* 4. My Hubs & Starting Base Dropdown */}
+              <div className="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-xl px-2 min-h-[36px] sm:min-h-[38px] flex-1 min-w-0 sm:w-auto lg:max-w-[225px]">
+                <Compass className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+                <label htmlFor="base-hotel-select" className="sr-only">
+                  {t.fromBaseLabel}
+                </label>
+                <select
+                  id="base-hotel-select"
+                  aria-label={lang === 'ru' ? 'Мои точки и старт' : 'My Hubs & Starting Point'}
+                  value={baseLocationId}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setBaseLocationId(val);
+                    if (val === 'xinyi-brownies-stay') {
+                      setSelectedPlaceId('my-stay-xinyi-brownies');
+                      if (mobileLayout === 'list') setMobileLayout('split');
+                    } else if (val === 'brownies-xinyi') {
+                      setSelectedPlaceId('brownies-xinyi');
+                      if (mobileLayout === 'list') setMobileLayout('split');
+                    } else if (val === 'tpkd-office') {
+                      setSelectedPlaceId('google-tpkd-office');
+                      if (mobileLayout === 'list') setMobileLayout('split');
+                    }
+                  }}
+                  className="bg-transparent text-xs font-semibold text-slate-900 focus:outline-none py-1 cursor-pointer truncate w-full"
+                >
+                  <optgroup
+                    label={
+                      lang === 'ru'
+                        ? 'Мои главные точки (Дом, Brownies, Офис)'
+                        : 'My Key Hubs (Home, Brownies, Office)'
+                    }
+                  >
+                    <option value="xinyi-brownies-stay">
+                      {lang === 'ru'
+                        ? '🏠 Дом: Синьи (у Brownies, Yixian Rd)'
+                        : '🏠 Stay: Xinyi (near Brownies, Yixian Rd)'}
+                    </option>
+                    <option value="brownies-xinyi">
+                      {lang === 'ru'
+                        ? '🍫 Ресторан Brownies (Синьи)'
+                        : '🍫 Brownies Restaurant (Xinyi)'}
+                    </option>
+                    <option value="tpkd-office">
+                      {lang === 'ru'
+                        ? '🏢 Офис: Google TPKD (Баньцяо Tpark)'
+                        : '🏢 Office: Google TPKD (Banqiao Tpark)'}
+                    </option>
+                  </optgroup>
+                  <optgroup
+                    label={
+                      lang === 'ru'
+                        ? 'Другие точки отсчёта расстояния'
+                        : 'Other Starting Points'
+                    }
+                  >
+                    {BASE_LOCATIONS.filter(
+                      (loc) =>
+                        loc.id !== 'xinyi-brownies-stay' &&
+                        loc.id !== 'brownies-xinyi' &&
+                        loc.id !== 'tpkd-office'
+                    ).map((loc) => {
+                      const locText = getLocalizedBaseLocation(loc, lang);
+                      return (
+                        <option key={loc.id} value={loc.id}>
+                          {locText.name}
+                        </option>
+                      );
+                    })}
+                  </optgroup>
+                </select>
+              </div>
+
+              {/* 5. Sort Dropdown */}
+              {activeTab !== 'itineraries' &&
+                activeTab !== 'tours' &&
+                activeTab !== 'snacks' &&
+                activeTab !== 'events' &&
+                activeTab !== 'activities' && (
+                  <div className="hidden sm:flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-xl px-2.5 min-h-[38px] sm:w-auto lg:max-w-[175px]">
+                    <ListFilter className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                    <label htmlFor="sort-mode-select" className="sr-only">
+                      Sort places by
+                    </label>
+                    <select
+                      id="sort-mode-select"
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value as SortMode)}
+                      className="bg-transparent text-xs font-semibold text-slate-900 focus:outline-none py-1.5 cursor-pointer truncate w-full"
+                    >
+                      <option value="featured">{t.sortFeatured}</option>
+                      <option value="nearest">{t.sortNearest}</option>
+                      <option value="name">{t.sortName}</option>
+                    </select>
+                  </div>
+                )}
+
+              {/* Reset + Offline Sync */}
+              <div className="flex items-center justify-between gap-1.5">
+                {hasActiveFilters && (
+                  <button
+                    type="button"
+                    onClick={handleResetFilters}
+                    title={t.resetFiltersBtn}
+                    className="min-h-[36px] sm:min-h-[38px] px-2.5 py-1 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 text-xs font-semibold inline-flex items-center gap-1 shrink-0 transition-colors whitespace-nowrap"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>{t.resetFiltersBtn}</span>
+                  </button>
+                )}
+
+                <OfflineControlBar
+                  totalPlacesCount={placesSource.length}
+                  savedCount={savedIds.length}
+                  savedOnly={savedOnly}
+                  swActive={swActive}
+                  onSyncOffline={async () => {
+                    await syncOfflineAssetsAndPlaces(placesSource, savedIds);
+                  }}
+                  onShowSavedSpots={() => {
                     if (
-                      activeTab === 'tours' ||
                       activeTab === 'itineraries' ||
-                      activeTab === 'snacks' ||
-                      activeTab === 'events' ||
-                      activeTab === 'activities'
+                      activeTab === 'tours' ||
+                      activeTab === 'events'
                     ) {
                       setActiveTab('all');
                     }
-                    setSubCategory(nextSub);
-                  }
-                }}
-                className="bg-transparent text-[11px] sm:text-xs font-semibold text-slate-900 focus:outline-none py-1 cursor-pointer truncate w-full"
-              >
-                <optgroup
-                  label={
-                    lang === 'ru'
-                      ? 'Разделы и подборки'
-                      : 'Views & Quick Lists'
-                  }
-                >
-                  <option value="all">
-                    {lang === 'ru'
-                      ? `🌏 Все места (${placesSource.length})`
-                      : `🌏 All Places (${placesSource.length})`}
-                  </option>
-                  <option value="tab:events">
-                    {lang === 'ru'
-                      ? `🎉 События 22 дек – 7 янв (${FESTIVE_EVENTS.length})`
-                      : `🎉 Events Dec 22 – Jan 7 (${FESTIVE_EVENTS.length})`}
-                  </option>
-                  <option value="tab:activities">
-                    {lang === 'ru'
-                      ? `💆 Активности: массаж, чай, креветки (${TAIWAN_ACTIVITIES.length})`
-                      : `💆 Activities: Massage, Tea & Local Fun (${TAIWAN_ACTIVITIES.length})`}
-                  </option>
-                  <option value="tab:snacks">
-                    {lang === 'ru'
-                      ? `🧋 Что попробовать: Снэки и Боба (${MUST_TRY_SNACKS.length})`
-                      : `🧋 Must-Try Snacks & Boba (${MUST_TRY_SNACKS.length})`}
-                  </option>
-                  <option value="tab:tours">
-                    {lang === 'ru'
-                      ? `🎟️ Туры Klook (${BOOKABLE_TOURS.length})`
-                      : `🎟️ Klook Tours (${BOOKABLE_TOURS.length})`}
-                  </option>
-                  <option value="preset:myhubs">
-                    {lang === 'ru'
-                      ? '🏠 Дом, Brownies и Офис TPKD'
-                      : '🏠 Home, Brownies & TPKD Office'}
-                  </option>
-                  <option value="preset:saved">
-                    {lang === 'ru'
-                      ? `⭐ Избранное (${savedIds.length})`
-                      : `⭐ Saved (${savedIds.length})`}
-                  </option>
-                  <option value="tab:sights">
-                    {lang === 'ru' ? '🏞️ Прогулки и парки' : '🏞️ Sights & Parks'}
-                  </option>
-                  <option value="tab:dining">
-                    {lang === 'ru' ? '🍜 Рестораны и еда' : '🍜 Dining & Food'}
-                  </option>
-                  <option value="tab:tea_nightlife">
-                    {lang === 'ru' ? '🍵 Чай, кофе и десерты' : '🍵 Tea & Cafes'}
-                  </option>
-                  <option value="tab:itineraries">
-                    {lang === 'ru' ? '🗺️ Маршруты по дням' : '🗺️ Day Itineraries'}
-                  </option>
-                </optgroup>
-                <optgroup
-                  label={
-                    lang === 'ru'
-                      ? 'Категории и кухня'
-                      : 'Categories & Cuisine'
-                  }
-                >
-                  {getAvailableSubCategories(placesSource, 'all').map((item) => (
-                    <option
-                      key={item.subCategory}
-                      value={`sub:${item.subCategory}`}
-                    >
-                      {getLocalizedSubCategory(item.subCategory, lang)} ({item.count})
-                    </option>
-                  ))}
-                </optgroup>
-              </select>
-            </div>
-
-            {/* 3. District Dropdown (Row 2 on mobile) */}
-            {activeTab !== 'itineraries' &&
-              activeTab !== 'tours' &&
-              activeTab !== 'snacks' &&
-              activeTab !== 'events' &&
-              activeTab !== 'activities' && (
-                <div className="flex items-center bg-slate-50 border border-slate-200 rounded-xl px-1.5 sm:px-2 min-h-[34px] sm:min-h-[38px] flex-1 min-w-0 sm:w-auto lg:max-w-[185px] order-3">
-                  <label htmlFor="district-filter-select" className="sr-only">
-                    {t.districtLabel}
-                  </label>
-                  <select
-                    id="district-filter-select"
-                    aria-label={lang === 'ru' ? 'Район' : 'District'}
-                    value={district}
-                    onChange={(e) => setDistrict(e.target.value)}
-                    className="bg-transparent text-[11px] sm:text-xs font-semibold text-slate-900 focus:outline-none py-1 cursor-pointer truncate w-full"
-                  >
-                    <option value="all">
-                      📍 {t.allAreasBtn} ({placesSource.length})
-                    </option>
-                    {availableDistricts.map((d) => (
-                      <option key={d.district} value={d.district}>
-                        {getLocalizedDistrict(d.district, lang)} ({d.count})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-
-            {/* 4. My Hubs & Starting Base Dropdown (Row 2 on mobile) */}
-            <div className="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-xl px-1.5 sm:px-2 min-h-[34px] sm:min-h-[38px] flex-1 min-w-0 sm:w-auto lg:max-w-[225px] order-4">
-              <Compass className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-700 shrink-0" />
-              <label htmlFor="base-hotel-select" className="sr-only">
-                {t.fromBaseLabel}
-              </label>
-              <select
-                id="base-hotel-select"
-                aria-label={lang === 'ru' ? 'Мои точки и старт' : 'My Hubs & Starting Point'}
-                value={baseLocationId}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  setBaseLocationId(val);
-                  if (val === 'xinyi-brownies-stay') {
-                    setSelectedPlaceId('my-stay-xinyi-brownies');
-                    if (mobileLayout === 'list') setMobileLayout('split');
-                  } else if (val === 'brownies-xinyi') {
-                    setSelectedPlaceId('brownies-xinyi');
-                    if (mobileLayout === 'list') setMobileLayout('split');
-                  } else if (val === 'tpkd-office') {
-                    setSelectedPlaceId('google-tpkd-office');
-                    if (mobileLayout === 'list') setMobileLayout('split');
-                  }
-                }}
-                className="bg-transparent text-[11px] sm:text-xs font-semibold text-slate-900 focus:outline-none py-1 cursor-pointer truncate w-full"
-              >
-                <optgroup
-                  label={
-                    lang === 'ru'
-                      ? 'Мои главные точки (Дом, Brownies, Офис)'
-                      : 'My Key Hubs (Home, Brownies, Office)'
-                  }
-                >
-                  <option value="xinyi-brownies-stay">
-                    {lang === 'ru'
-                      ? '🏠 Дом: Синьи (у Brownies, Yixian Rd)'
-                      : '🏠 Stay: Xinyi (near Brownies, Yixian Rd)'}
-                  </option>
-                  <option value="brownies-xinyi">
-                    {lang === 'ru'
-                      ? '🍫 Ресторан Brownies (Синьи)'
-                      : '🍫 Brownies Restaurant (Xinyi)'}
-                  </option>
-                  <option value="tpkd-office">
-                    {lang === 'ru'
-                      ? '🏢 Офис: Google TPKD (Баньцяо Tpark)'
-                      : '🏢 Office: Google TPKD (Banqiao Tpark)'}
-                  </option>
-                </optgroup>
-                <optgroup
-                  label={
-                    lang === 'ru'
-                      ? 'Другие точки отсчёта расстояния'
-                      : 'Other Starting Points'
-                  }
-                >
-                  {BASE_LOCATIONS.filter(
-                    (loc) =>
-                      loc.id !== 'xinyi-brownies-stay' &&
-                      loc.id !== 'brownies-xinyi' &&
-                      loc.id !== 'tpkd-office'
-                  ).map((loc) => {
-                    const locText = getLocalizedBaseLocation(loc, lang);
-                    return (
-                      <option key={loc.id} value={loc.id}>
-                        {locText.name}
-                      </option>
-                    );
-                  })}
-                </optgroup>
-              </select>
-            </div>
-
-            {/* 5. Sort Dropdown (Toolbar) */}
-            {activeTab !== 'itineraries' &&
-              activeTab !== 'tours' &&
-              activeTab !== 'snacks' &&
-              activeTab !== 'events' &&
-              activeTab !== 'activities' && (
-                <div className="hidden sm:flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-xl px-2.5 min-h-[38px] sm:w-auto lg:max-w-[175px] order-7">
-                  <ListFilter className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                  <label htmlFor="sort-mode-select" className="sr-only">
-                    Sort places by
-                  </label>
-                  <select
-                    id="sort-mode-select"
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value as SortMode)}
-                    className="bg-transparent text-xs font-semibold text-slate-900 focus:outline-none py-1.5 cursor-pointer truncate w-full"
-                  >
-                    <option value="featured">{t.sortFeatured}</option>
-                    <option value="nearest">{t.sortNearest}</option>
-                    <option value="name">{t.sortName}</option>
-                  </select>
-                </div>
-              )}
-
-            {/* Reset button when filters active */}
-            {hasActiveFilters && (
-              <button
-                type="button"
-                onClick={handleResetFilters}
-                title={t.resetFiltersBtn}
-                className="min-h-[34px] sm:min-h-[38px] px-2 py-1 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 text-xs font-semibold inline-flex items-center gap-1 shrink-0 transition-colors whitespace-nowrap order-7"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span className="hidden xl:inline">{t.resetFiltersBtn}</span>
-              </button>
-            )}
-
-            {/* Offline Sync Control (Compact icon on mobile, full button on desktop) */}
-            <div className="flex items-center shrink-0 order-8">
-              <OfflineControlBar
-                totalPlacesCount={placesSource.length}
-                savedCount={savedIds.length}
-                savedOnly={savedOnly}
-                swActive={swActive}
-                onSyncOffline={async () => {
-                  await syncOfflineAssetsAndPlaces(placesSource, savedIds);
-                }}
-                onShowSavedSpots={() => {
-                  if (
-                    activeTab === 'itineraries' ||
-                    activeTab === 'tours' ||
-                    activeTab === 'events'
-                  ) {
-                    setActiveTab('all');
-                  }
-                  setSavedOnly(true);
-                }}
-                lang={lang}
-              />
+                    setSavedOnly(true);
+                  }}
+                  lang={lang}
+                />
+              </div>
             </div>
           </div>
         </section>
 
         {/* Main 2-Column Split Grid (Desktop: Left Directory / Itineraries, Right Sticky Interactive Map) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-2.5 sm:gap-4 lg:gap-5 items-start">
-          {/* Interactive Map Column (On Mobile: compact 235px height in 'split' so first card is visible above fold, or full-height in 'map' mode) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 sm:gap-4 lg:gap-5 items-start">
+          {/* Interactive Map Column (Compact 200px height on mobile split view so list is easy to scroll) */}
           <div
             className={`lg:col-span-6 lg:order-2 lg:sticky lg:top-20 ${
               mobileLayout === 'list' ? 'hidden lg:block' : 'block'
@@ -1143,8 +1203,8 @@ export default function App() {
             <div
               className={`w-full rounded-2xl overflow-hidden border border-slate-200/90 shadow-sm transition-all ${
                 mobileLayout === 'map'
-                  ? 'h-[calc(100dvh-185px)] min-h-[420px] lg:h-[calc(100vh-140px)]'
-                  : 'h-[235px] sm:h-[400px] lg:h-[calc(100vh-140px)]'
+                  ? 'h-[calc(100dvh-215px)] min-h-[380px] lg:h-[calc(100vh-140px)]'
+                  : 'h-[205px] sm:h-[360px] lg:h-[calc(100vh-140px)]'
               }`}
             >
               <InteractiveMap

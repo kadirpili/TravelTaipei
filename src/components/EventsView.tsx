@@ -236,14 +236,14 @@ export const EventsView: React.FC<EventsViewProps> = ({
                     setDetailEvent(ev);
                   }
                 }}
-                className={`group rounded-2xl bg-white border transition-all duration-150 p-2.5 sm:p-3 flex items-center gap-3 cursor-pointer select-none ${
+                className={`group rounded-2xl bg-white border transition-all duration-150 p-2.5 sm:p-3 flex items-center gap-2.5 sm:gap-3 cursor-pointer select-none active:scale-[0.99] ${
                   isSelected
                     ? 'border-rose-600 ring-2 ring-rose-500/20 bg-rose-50/20 shadow-sm'
                     : 'border-slate-200/90 hover:border-rose-500/60 hover:bg-slate-50/60 shadow-2xs'
                 }`}
               >
                 {/* Left Compact Thumbnail */}
-                <div className="relative w-20 h-20 rounded-xl overflow-hidden shrink-0 bg-slate-100 border border-slate-200/60">
+                <div className="relative w-[68px] h-[68px] sm:w-20 sm:h-20 rounded-xl overflow-hidden shrink-0 bg-slate-100 border border-slate-200/60">
                   <img
                     src={heroImg}
                     alt={title}
@@ -263,27 +263,23 @@ export const EventsView: React.FC<EventsViewProps> = ({
 
                 {/* Center Compact Info */}
                 <div className="flex-1 min-w-0 space-y-0.5">
-                  <div className="flex items-center justify-between gap-2 text-[11px]">
+                  <div className="flex items-center justify-between gap-1.5 text-[11px]">
                     <span className="font-semibold text-rose-800 truncate">
                       📍 {cityLabel} · {ev.titleZh}
                     </span>
-                    <span className="font-mono-num font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-1.5 py-0.2 rounded shrink-0 truncate max-w-[150px]">
+                    <span className="font-mono-num font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-1.5 py-0.2 rounded shrink-0 truncate max-w-[120px] sm:max-w-[150px]">
                       {priceBadge}
                     </span>
                   </div>
 
-                  <h3 className="font-display text-sm sm:text-base font-bold text-slate-900 group-hover:text-rose-800 transition-colors truncate">
+                  <h3 className="font-display text-[13px] sm:text-base font-bold text-slate-900 group-hover:text-rose-800 transition-colors leading-snug line-clamp-2 sm:line-clamp-1">
                     {title}
                   </h3>
 
-                  <p className="text-xs text-slate-500 line-clamp-1 leading-relaxed">
-                    {description}
-                  </p>
-
-                  <div className="flex items-center justify-between gap-2 pt-0.5 text-[11px] text-slate-500">
+                  <div className="flex items-center justify-between gap-2 text-[11px] text-slate-500">
                     <span className="truncate">{venueLabel}</span>
                     <span className="text-rose-700 font-semibold shrink-0">
-                      {lang === 'ru' ? 'Подробнее →' : 'Details →'}
+                      {lang === 'ru' ? 'Инфо →' : 'Info →'}
                     </span>
                   </div>
                 </div>

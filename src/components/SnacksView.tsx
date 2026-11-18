@@ -154,14 +154,14 @@ export const SnacksView: React.FC<SnacksViewProps> = ({
                   setDetailSnack(snack);
                 }
               }}
-              className={`group bg-white rounded-2xl border transition-all p-2.5 sm:p-3 flex items-center gap-3 cursor-pointer select-none ${
+              className={`group bg-white rounded-2xl border transition-all p-2.5 sm:p-3 flex items-center gap-2.5 sm:gap-3 cursor-pointer select-none active:scale-[0.99] ${
                 isSelected
                   ? 'border-amber-600 ring-2 ring-amber-500/20 bg-amber-50/20 shadow-sm'
                   : 'border-slate-200/90 hover:border-amber-500/60 hover:bg-slate-50/60 shadow-2xs'
               }`}
             >
               {/* Left Compact Thumbnail */}
-              <div className="relative w-20 h-20 rounded-xl overflow-hidden shrink-0 bg-slate-100 border border-slate-200/60">
+              <div className="relative w-[68px] h-[68px] sm:w-20 sm:h-20 rounded-xl overflow-hidden shrink-0 bg-slate-100 border border-slate-200/60">
                 <img
                   src={imgUrl}
                   alt={title}
@@ -183,7 +183,7 @@ export const SnacksView: React.FC<SnacksViewProps> = ({
 
               {/* Center Compact Info */}
               <div className="flex-1 min-w-0 space-y-0.5">
-                <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center justify-between gap-1.5">
                   <span className="text-[11px] font-semibold text-amber-800 truncate">
                     {badge}
                   </span>
@@ -192,26 +192,18 @@ export const SnacksView: React.FC<SnacksViewProps> = ({
                   </span>
                 </div>
 
-                <div className="flex items-baseline gap-1.5 min-w-0">
-                  <h3 className="font-display text-sm sm:text-base font-bold text-slate-900 group-hover:text-amber-800 transition-colors truncate">
-                    {title}
-                  </h3>
-                  <span className="text-xs font-bold text-slate-600 shrink-0">
-                    {snack.chineseName}
-                  </span>
-                </div>
+                <h3 className="font-display text-[13px] sm:text-base font-bold text-slate-900 group-hover:text-amber-800 transition-colors leading-snug line-clamp-2 sm:line-clamp-1">
+                  {title}
+                </h3>
 
-                <p className="text-xs text-slate-500 line-clamp-1 leading-relaxed">
-                  {description}
-                </p>
-
-                <div className="flex items-center justify-between gap-2 pt-0.5 text-[11px] text-slate-500">
+                <div className="flex items-center justify-between gap-2 text-[11px] text-slate-500">
                   <span className="truncate">
-                    📍 {snack.placeIds.length}{' '}
-                    {lang === 'ru' ? 'лучших мест на карте' : 'best spots on map'}
+                    <strong className="text-slate-700">{snack.chineseName}</strong> · 📍{' '}
+                    {snack.placeIds.length}{' '}
+                    {lang === 'ru' ? 'мест на карте' : 'spots on map'}
                   </span>
                   <span className="text-amber-700 font-semibold shrink-0">
-                    {lang === 'ru' ? 'Заказ и детали →' : 'Order & Details →'}
+                    {lang === 'ru' ? 'Заказ →' : 'Order →'}
                   </span>
                 </div>
               </div>
