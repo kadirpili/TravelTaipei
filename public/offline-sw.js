@@ -1,6 +1,5 @@
-const CACHE_VERSION = 'taipei-wayfinder-sw-v3';
+const CACHE_VERSION = 'taipei-wayfinder-sw-v4';
 const DATA_CACHE = 'taipei-places-data-cache';
-const TILE_CACHE = 'taipei-osm-tiles-cache';
 const BASE_PATH = new URL('./', self.location.href).pathname;
 
 const CORE_ASSETS = [
@@ -18,9 +17,7 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_VERSION).then((cache) => {
-      return cache.addAll(CORE_ASSETS).catch(() => {
-        // Ignore individual asset failures during install
-      });
+      return cache.addAll(CORE_ASSETS).catch(() => {});
     })
   );
 });
@@ -32,10 +29,7 @@ self.addEventListener('activate', (event) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter(
-              (key) =>
-                key !== CACHE_VERSION && key !== DATA_CACHE && key !== TILE_CACHE
-            )
+            .filter((key) => key !== CACHE_VERSION && key !== DATA_CACHE)
             .map((key) => caches.delete(key))
         )
       )
@@ -68,32 +62,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 2. OpenStreetMap Tiles & Fonts & Leaflet CSS: Cache-First
-  if (
-    url.hostname === 'tile.openstreetmap.org' ||
-    url.hostname === 'fonts.googleapis.com' ||
-    url.hostname === 'fonts.gstatic.com' ||
-    url.hostname === 'unpkg.com'
-  ) {
-    event.respondWith(
-      caches.open(TILE_CACHE).then(async (cache) => {
-        const cached = await cache.match(request);
-        if (cached) return cached;
-        try {
-          const response = await fetch(request);
-          if (response && (response.status === 200 || response.type === 'opaque')) {
-            cache.put(request, response.clone());
-          }
-          return response;
-        } catch {
-          return new Response('', { status: 408, statusText: 'Offline tile unavailable' });
-        }
-      })
-    );
-    return;
-  }
-
-  // 3. Same-origin app shell & module scripts: Network-First falling back to Cache
+  // 2. Same-origin app shell & module scripts: Network-First falling back to Cache
   if (url.origin === self.location.origin) {
     event.respondWith(
       caches.open(CACHE_VERSION).then(async (cache) => {
@@ -107,7 +76,9 @@ self.addEventListener('fetch', (event) => {
           const cached = await cache.match(request);
           if (cached) return cached;
           if (request.mode === 'navigate') {
-            const indexCached = await cache.match(`${BASE_PATH}index.html`) || await cache.match(BASE_PATH);
+            const indexCached =
+              (await cache.match(`${BASE_PATH}index.html`)) ||
+              (await cache.match(BASE_PATH));
             if (indexCached) return indexCached;
           }
           return new Response('Offline', { status: 503 });

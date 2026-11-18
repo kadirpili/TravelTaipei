@@ -13,14 +13,6 @@ export default defineConfig(({command}) => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: [
-          'icon.svg',
-          'apple-touch-icon.png',
-          'pwa-192x192.png',
-          'pwa-512x512.png',
-          'pwa-maskable-512x512.png',
-          'places-offline-cache.json',
-        ],
         manifest: {
           id: base,
           name: 'Taipei Wayfinder — Interactive Travel & Dining Map',
@@ -67,35 +59,7 @@ export default defineConfig(({command}) => {
                 cacheName: 'taipei-places-data-cache',
                 expiration: {
                   maxEntries: 5,
-                  maxAgeSeconds: 60 * 60 * 24 * 90, // 90 days
-                },
-                cacheableResponse: {
-                  statuses: [0, 200],
-                },
-              },
-            },
-            {
-              urlPattern: /^https:\/\/tile\.openstreetmap\.org\/.*/i,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'taipei-osm-tiles-cache',
-                expiration: {
-                  maxEntries: 500,
-                  maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
-                },
-                cacheableResponse: {
-                  statuses: [0, 200],
-                },
-              },
-            },
-            {
-              urlPattern: /^https:\/\/unpkg\.com\/leaflet.*/i,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'leaflet-assets-cache',
-                expiration: {
-                  maxEntries: 10,
-                  maxAgeSeconds: 60 * 60 * 24 * 365,
+                  maxAgeSeconds: 60 * 60 * 24 * 90,
                 },
                 cacheableResponse: {
                   statuses: [0, 200],
@@ -143,10 +107,7 @@ export default defineConfig(({command}) => {
       },
     },
     server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modify—file watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
-      // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
     },
   };

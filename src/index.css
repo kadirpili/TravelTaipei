@@ -32,24 +32,52 @@
   scrollbar-width: none;
 }
 
-/* Clean custom Leaflet markers */
+/* Guarantee Leaflet map tiles and markers never get distorted by Tailwind img resets */
+.leaflet-container {
+  font-family: var(--font-sans) !important;
+  background-color: #E5E7EB !important;
+  width: 100%;
+  height: 100%;
+}
+
+.leaflet-container img,
+.leaflet-container img.leaflet-tile,
+.leaflet-container .leaflet-marker-icon,
+.leaflet-container .leaflet-marker-shadow {
+  max-width: none !important;
+  max-height: none !important;
+  display: inline;
+}
+
 .custom-map-pin {
-  background: transparent;
-  border: none;
+  background: transparent !important;
+  border: none !important;
 }
 
 .leaflet-popup-content-wrapper {
-  border-radius: 14px !important;
-  box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.18) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.22) !important;
   padding: 0 !important;
+  overflow: hidden;
 }
 
 .leaflet-popup-content {
   margin: 0 !important;
   font-family: var(--font-sans) !important;
+  line-height: 1.35 !important;
 }
 
-.leaflet-container {
-  font-family: var(--font-sans) !important;
-  background-color: #E8ECEF !important;
+.leaflet-popup-close-button {
+  top: 8px !important;
+  right: 8px !important;
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 9999px !important;
+  background: rgba(15, 23, 42, 0.72) !important;
+  color: #ffffff !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  text-align: center !important;
+  padding: 0 !important;
+  z-index: 10;
 }
