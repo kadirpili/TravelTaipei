@@ -1006,6 +1006,24 @@ export const PLACE_TRANSLATIONS_RU: Record<string, PlaceTranslationRu> = {
     mrtStationRu: 'Метро Songjiang Nanjing / Zhongxiao Xinsheng',
     tagsRu: ['Индийское карри', 'Вегетарианское и Халяль', 'Тандури'],
   },
+  'mayur-indian-kitchen-101': {
+    nameRu: 'Индийский ресторан Mayur MIK-1 (Около башни Тайбэй 101)',
+    overviewRu:
+      'Легендарный флагманский ресторан индийской кухни шефа Маюра на улице Keelung Road, всего в 5 минутах ходьбы от небоскреба Тайбэй 101 и вашего отеля. Аутентичная глиняная печь тандур, сочный цыпленок тикка, нежнейшее карри баттер чикен, горячие сырные и чесночные лепешки наан, а также обширное халяльное (Halal) и вегетарианское меню.',
+    insiderTipRu:
+      'Всего 5 минут пешком от Тайбэй 101 и World Trade Center (и 4 минуты от вашего жилья на Yixian Rd!). Обязательно закажите горячий чесночный наан (Garlic Naan) прямо из тандура с карри Chicken Tikka Masala или Palak Paneer. Есть отличное халяльное и веганское меню.',
+    mrtStationRu: 'Станция Taipei 101 / World Trade Center (выход 1 — 5 мин) / Taipei City Hall (выход 2)',
+    recommendedDurationRu: '60–90 минут',
+    tagsRu: [
+      'Mayur 101',
+      'Индийский ресторан',
+      'Рядом с Тайбэй 101',
+      'Халяль (Halal)',
+      'Печь тандур',
+      'Лепешки наан',
+      'Близко к дому',
+    ],
+  },
   'madras-magic-indian': {
     nameRu: 'Индийский ресторан Madras Magic',
     overviewRu:

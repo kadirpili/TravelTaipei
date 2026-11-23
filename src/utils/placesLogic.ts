@@ -173,7 +173,24 @@ export function filterAndSortPlaces(
           .split(/[\s,]+/)
           .map((t) => t.trim())
           .filter((t) => t.length > 0);
-        const stopwords = new Set(['in', 'at', 'near', 'on', 'the', 'of', 'and', 'в', 'на', 'у', 'возле']);
+        const stopwords = new Set([
+          'in',
+          'at',
+          'near',
+          'close',
+          'to',
+          'from',
+          'on',
+          'the',
+          'of',
+          'and',
+          'в',
+          'на',
+          'у',
+          'возле',
+          'около',
+          'рядом',
+        ]);
         const tokens = rawTokens.length > 1 ? rawTokens.filter((t) => !stopwords.has(t)) : rawTokens;
         const allTokensMatch =
           tokens.length > 0 && tokens.every((token) => searchableText.includes(token));

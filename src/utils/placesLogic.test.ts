@@ -564,6 +564,53 @@ test('OOTOYA in Taipei City Hall and Breakfast in Yixian Road exist and match us
   }
 });
 
+test('Mayur Indian Kitchen close to Taipei 101 exists, is in Xinyi, and matches user queries', () => {
+  const xinyiBase = BASE_LOCATIONS.find((b) => b.id === 'xinyi-brownies-stay')!;
+  const mayur101 = PLACES_DATA.find((p) => p.id === 'mayur-indian-kitchen-101');
+  assert.ok(mayur101, 'Expected mayur-indian-kitchen-101 in PLACES_DATA');
+  assert.equal(mayur101.district, 'Xinyi');
+  assert.equal(mayur101.subCategory, 'Indian, Thai & Vietnamese');
+  assert.ok(mayur101.featured, 'Expected Mayur 101 to be featured');
+
+  const dist = calculateDistanceKm(
+    xinyiBase.lat,
+    xinyiBase.lng,
+    mayur101.lat,
+    mayur101.lng
+  );
+  assert.ok(dist < 0.6, `Expected Mayur 101 to be close to user stay, got ${dist} km`);
+
+  for (const query of [
+    'mayur',
+    'Mayur',
+    'mayur restaraunt close to 101',
+    'mayur close to 101',
+    'mayur 101',
+    '馬友友 101',
+    'indian 101',
+    'tandoori',
+    'garlic naan',
+  ]) {
+    const res = filterAndSortPlaces(PLACES_DATA, {
+      macroCategory: 'all',
+      subCategory: 'all',
+      district: 'all',
+      priceTier: 'all',
+      searchQuery: query,
+      savedOnly: false,
+      savedIds: [],
+      sortBy: 'featured',
+      baseLocation: xinyiBase,
+      lang: 'ru',
+    });
+    assert.ok(
+      res.some((p) => p.id === 'mayur-indian-kitchen-101'),
+      `Expected mayur-indian-kitchen-101 to match query "${query}"`
+    );
+  }
+});
+
+
 
 
 

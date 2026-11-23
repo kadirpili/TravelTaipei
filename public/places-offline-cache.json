@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "syncedAt": "2026-11-23T12:26:18.377Z",
-  "placesCount": 122,
+  "syncedAt": "2026-11-23T12:30:59.735Z",
+  "placesCount": 123,
   "savedIds": [
     "taipei-101",
     "din-tai-fung-101",
@@ -1661,6 +1661,34 @@
         "Indian Curry",
         "Vegetarian Friendly",
         "Halal Options"
+      ]
+    },
+    {
+      "id": "mayur-indian-kitchen-101",
+      "name": "Mayur Indian Kitchen MIK-1 (Close to Taipei 101)",
+      "chineseName": "馬友友印度廚房 (基隆路旗艦店・近台北101)",
+      "macroCategory": "dining",
+      "subCategory": "Indian, Thai & Vietnamese",
+      "district": "Xinyi",
+      "city": "Taipei",
+      "lat": 25.037,
+      "lng": 121.5616,
+      "overview": "Taipei’s premier Indian restaurant flagship founded by Chef Mayur, located on Keelung Road just 5 minutes from Taipei 101, Grand Hyatt, and your stay. Acclaimed for authentic charcoal clay-oven tandoori, aromatic butter chicken, lamb rogan josh, hot cheese & garlic naans, and extensive Halal & vegan selections.",
+      "googleMapsUrl": "https://maps.google.com/?q=Mayur+Indian+Kitchen+Keelung+Taipei",
+      "mrtStation": "Taipei 101 / World Trade Center Station (Red Line R03 Exit 1 — 5 min walk) or Taipei City Hall (Exit 2)",
+      "priceTier": "$$",
+      "recommendedDuration": "60–90 mins",
+      "insiderTip": "Only 5 minutes walk from Taipei 101 and 4 minutes from your stay on Yixian Rd! Don’t miss their sizzling garlic butter naan baked fresh against tandoor oven walls, paired with rich Chicken Tikka Masala. Certified Halal-friendly and vegetarian options.",
+      "featured": true,
+      "tags": [
+        "Mayur Indian Kitchen",
+        "Mayur Restaurant",
+        "Mayur 101",
+        "Close to Taipei 101",
+        "Indian Restaurant 101",
+        "Keelung Rd Flagship",
+        "Halal Friendly",
+        "Tandoori & Garlic Naan"
       ]
     },
     {
