@@ -163,15 +163,18 @@ export function filterAndSortPlaces(
         .replace(/restaraunt/g, 'restaurant')
         .replace(/digntaifung/g, 'din tai fung')
         .replace(/dintaifung/g, 'din tai fung')
+        .replace(/ottoya/g, 'ootoya')
         .replace(/noughut|noughet|nugat/g, 'nougat')
         .replace(/snakcs|snaks/g, 'snacks')
         .replace(/taizhong/g, 'taichung');
 
       if (!searchableText.includes(query) && !searchableText.includes(normalizedQuery)) {
-        const tokens = normalizedQuery
+        const rawTokens = normalizedQuery
           .split(/[\s,]+/)
           .map((t) => t.trim())
           .filter((t) => t.length > 0);
+        const stopwords = new Set(['in', 'at', 'near', 'on', 'the', 'of', 'and', 'в', 'на', 'у', 'возле']);
+        const tokens = rawTokens.length > 1 ? rawTokens.filter((t) => !stopwords.has(t)) : rawTokens;
         const allTokensMatch =
           tokens.length > 0 && tokens.every((token) => searchableText.includes(token));
         if (!allTokensMatch) {

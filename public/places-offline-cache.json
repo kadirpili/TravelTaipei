@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "syncedAt": "2026-11-13T09:03:29.337Z",
-  "placesCount": 121,
+  "syncedAt": "2026-11-23T12:26:18.377Z",
+  "placesCount": 122,
   "savedIds": [
     "taipei-101",
     "din-tai-fung-101",
@@ -1304,22 +1304,29 @@
     },
     {
       "id": "ootoya-unipresident",
-      "name": "OOTOYA Uni-President Dept. Store Branch",
-      "chineseName": "大戶屋 統一時代店",
+      "name": "OOTOYA Japanese Home Cooking (Taipei City Hall / Uni-Ustyle B2)",
+      "chineseName": "大戶屋 日本家庭料理 (統一時代台北店 / 市府轉運站)",
       "macroCategory": "dining",
       "subCategory": "Japanese & Teppanyaki",
       "district": "Xinyi",
       "city": "Taipei",
       "lat": 25.0405,
       "lng": 121.5655,
-      "overview": "Beloved Japanese chain specializing in wholesome, made-to-order teishoku (set meals) featuring charcoal-grilled fish, chicken katsu, and unlimited rice/miso refills.",
+      "overview": "Beloved Japanese home-cooking chain located in Uni-Ustyle B2 directly connected to Taipei City Hall Station. Famous for comforting, wholesome teishoku set meals: charcoal-grilled mackerel, sweet & sour black vinegar chicken, crispy tonkatsu, and steaming bowls of multi-grain rice.",
       "googleMapsUrl": "https://maps.google.com/?q=OOTOYA+Uni+President+Taipei",
-      "mrtStation": "Taipei City Hall Station (B2)",
+      "mrtStation": "Taipei City Hall Station (Direct B2 concourse connection, Exit 2)",
       "priceTier": "$$",
+      "recommendedDuration": "45–75 mins",
+      "insiderTip": "Direct underground access from MRT Taipei City Hall Station Exit 2 (no rain needed!). Enjoy free unlimited refills of hot white/multi-grain rice, crisp shredded cabbage, and authentic miso soup with any set meal.",
+      "featured": true,
       "tags": [
-        "Teishoku Set Meals",
-        "Grilled Fish",
-        "Solo-Friendly"
+        "OOTOYA City Hall",
+        "Ottoya",
+        "Japanese Teishoku",
+        "Taipei City Hall B2",
+        "Uni-Ustyle",
+        "Free Rice & Soup Refills",
+        "Tonkatsu & Grilled Fish"
       ]
     },
     {
@@ -2657,6 +2664,33 @@
         "Indoor Prawn Fishing",
         "Salt Grilled Shrimp",
         "Taiwanese Culture"
+      ]
+    },
+    {
+      "id": "yesme-breakfast-yixian",
+      "name": "Yes me Handcrafted Breakfast (Yixian Road / Lane 42)",
+      "chineseName": "Yes me 手研早餐 (信義逸仙店・手工蛋餅・厚豆漿)",
+      "macroCategory": "dining",
+      "subCategory": "Taiwanese & Dumplings",
+      "district": "Xinyi",
+      "city": "Taipei",
+      "lat": 25.0401,
+      "lng": 121.5623,
+      "overview": "Artisan morning breakfast spot tucked right in Yixian Road Lane 42, just 30 meters from your stay. Celebrated for over 90% in-house handcrafted ingredients: hand-rolled flaky crispy danbing (egg crepes), stone-ground 1:8 thick rich soy milk, pan-seared pork loin milk toast, and handmade radish cakes.",
+      "googleMapsUrl": "https://maps.google.com/?q=Yes+me+手研早餐+信義逸仙店",
+      "mrtStation": "Taipei City Hall Station (Exit 2 — 4 min walk) or Sun Yat-Sen Memorial Hall (Exit 4)",
+      "priceTier": "$",
+      "recommendedDuration": "30–45 mins",
+      "insiderTip": "Located right next to your stay in Lane 42! Get their signature crispy handmade danbing (extra flaky outside, chewy inside) paired with warm 1:8 thick soy milk and house Taiwanese chili sauce. Opens bright and early at 06:30 AM.",
+      "featured": true,
+      "tags": [
+        "Yixian Road Breakfast",
+        "Breakfast in Yixian Road",
+        "Taiwanese Breakfast",
+        "Handmade Danbing",
+        "Thick Soy Milk",
+        "Lane 42 Next to Stay",
+        "Local Morning Spot"
       ]
     }
   ]

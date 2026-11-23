@@ -501,6 +501,70 @@ test('TAIWAN_ACTIVITIES cover foot massage, knife massage, tea ceremonies, shrim
   assert.ok(filterTaiwanActivities(TAIWAN_ACTIVITIES, 'all', 'shrimp').some((a) => a.id === 'indoor-shrimp-fishing-grill'));
 });
 
+test('OOTOYA in Taipei City Hall and Breakfast in Yixian Road exist and match user queries', () => {
+  const xinyiBase = BASE_LOCATIONS.find((b) => b.id === 'xinyi-brownies-stay')!;
+
+  // 1. OOTOYA at Taipei City Hall / Uni-Ustyle B2
+  const ootoya = PLACES_DATA.find((p) => p.id === 'ootoya-unipresident');
+  assert.ok(ootoya, 'Expected ootoya-unipresident in PLACES_DATA');
+  assert.equal(ootoya.district, 'Xinyi');
+  assert.ok(ootoya.featured, 'Expected Ootoya to be featured');
+
+  for (const query of ['ottoya', 'ootoya', 'ottoya in city hall', 'ootoya city hall', '大戶屋', 'Uni-Ustyle']) {
+    const res = filterAndSortPlaces(PLACES_DATA, {
+      macroCategory: 'all',
+      subCategory: 'all',
+      district: 'all',
+      priceTier: 'all',
+      searchQuery: query,
+      savedOnly: false,
+      savedIds: [],
+      sortBy: 'featured',
+      baseLocation: xinyiBase,
+      lang: 'ru',
+    });
+    assert.ok(
+      res.some((p) => p.id === 'ootoya-unipresident'),
+      `Expected ootoya-unipresident to match query "${query}"`
+    );
+  }
+
+  // 2. Breakfast in Yixian Road (Yes me Handcrafted Breakfast)
+  const yixianBreakfast = PLACES_DATA.find((p) => p.id === 'yesme-breakfast-yixian');
+  assert.ok(yixianBreakfast, 'Expected yesme-breakfast-yixian in PLACES_DATA');
+  assert.equal(yixianBreakfast.district, 'Xinyi');
+  assert.ok(yixianBreakfast.featured, 'Expected Yixian breakfast to be featured');
+
+  for (const query of [
+    'breakfast in yixian road',
+    'yixian road breakfast',
+    'yixian breakfast',
+    'breakfast',
+    'Yes me',
+    'danbing',
+    '手研早餐',
+    'Завтрак на Yixian Road',
+  ]) {
+    const res = filterAndSortPlaces(PLACES_DATA, {
+      macroCategory: 'all',
+      subCategory: 'all',
+      district: 'all',
+      priceTier: 'all',
+      searchQuery: query,
+      savedOnly: false,
+      savedIds: [],
+      sortBy: 'featured',
+      baseLocation: xinyiBase,
+      lang: 'ru',
+    });
+    assert.ok(
+      res.some((p) => p.id === 'yesme-breakfast-yixian'),
+      `Expected yesme-breakfast-yixian to match query "${query}"`
+    );
+  }
+});
+
+
 
 
 
